@@ -10,6 +10,8 @@ CREATE TABLE profiles (
 
 CREATE TABLE matches (
  match_id integer PRIMARY KEY,
+ user_id_1 integer,
+ user_id_2 integer,
  FOREIGN KEY(user_id_1) REFERENCES profiles(user_id),
  FOREIGN KEY(user_id_2) REFERENCES profiles(user_id)
 );
