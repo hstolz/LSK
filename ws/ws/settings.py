@@ -79,6 +79,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'USER': os.getenv('wu_user'),
+        'PASSWORD': os.getenv('wu_password'),
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -120,3 +124,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = '/Users/situhan/Documents/School/COS333/Project/LSK/ws/static'
