@@ -94,12 +94,20 @@ else:
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.mysql',
             'HOST': '127.0.0.1',
+            'PORT': '3306',
+            'NAME': 'wu_db',
             'USER': 'wu_user',
             'PASSWORD': 'wu_password',
-            'PORT': '3306',
+
+            # below is what we were using when running ~locally~ (?)
+            # 'ENGINE': 'django.db.backends.sqlite3',
+            # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            # 'HOST': '127.0.0.1',
+            # 'USER': 'wu_user',
+            # 'PASSWORD': 'wu_password',
+            # 'PORT': '3306',
             # 'USER': os.getenv('wu_user'),
             # 'PASSWORD': os.getenv('wu_password'),
             # 'HOST': '/cloudsql/wordup-163921:us-central1:wordup-database',
