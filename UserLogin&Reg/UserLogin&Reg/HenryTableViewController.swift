@@ -15,7 +15,7 @@ class HenryTableViewController: UITableViewController {
     // GET //
     //------------------------------------------------------------------//
     //    var TableData:Array< String > = Array <String>()
-    var TableData = [[String: AnyObject]]()
+    var TableData = [[String: AnyObject]]() // new int array to save post item
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +24,7 @@ class HenryTableViewController: UITableViewController {
         // =============================================================// 
         
         //////POST!!!!
+        print("POSTIN")
         //let url:String = "https://jsonplaceholder.typicode.com/todos/1"
         let userEndpoint = "https://wordup-163921.appspot.com/matches/"
         
@@ -36,7 +37,8 @@ class HenryTableViewController: UITableViewController {
         var userUrlRequest = URLRequest(url: userUrl)
         userUrlRequest.httpMethod = "POST"
         let newUser: [String: Any] =
-            ["last_name": "stolz", "known_lang": "eng", "first_name": "henry", "learn_lang": "chi", "user_id": 0, "user_name": "hstolz", "pref_time": "2003-12-31T16:00:00Z"] //email and password, and repeatpassword are stored
+            ["last_name": "stolz", "known_lang": "eng", "first_name": "henry", "learn_lang": "chi", "user_id": 0, "user_name": "hstolz", "pref_time": "2003-12-31T16:00:00Z"]
+        //email and password, and repeatpassword are stored
         let jsonUser: Data
         do {
             jsonUser = try JSONSerialization.data(withJSONObject: newUser, options: [])
@@ -60,20 +62,23 @@ class HenryTableViewController: UITableViewController {
             
             // parse the result as JSON, since that's what the API provides
             do {
+                print ("GOING INTO DO WHILE")
+                
                 guard let receivedUser = try JSONSerialization.jsonObject(with: responseData,
                                                                           options: []) as? [String: Any] else {
                                                                             print("Could not get JSON from responseData as dictionary")
                                                                             return
                 }
                 print("The todo is: " + receivedUser.description)
+                print(receivedUser["match_id"])
                 
-                guard let userId = receivedUser["last_name"] as? String else {
+                guard let userId = receivedUser["match_id"] as? Int else {
                     print("Could not get email from JSON")
                     return
                 }
                 print("The ID is: \(userId)")
             } catch  {
-                print("error parsing response from POST on /todos")
+//                print("error parsing response from POST on /todos")
                 return
             }
         }
@@ -83,6 +88,8 @@ class HenryTableViewController: UITableViewController {
         
         // GET //
         //------------------------------------------------------------------//
+        
+        print("GETTIN")
         
         let url:String = "https://wordup-163921.appspot.com/matches/"
         
@@ -152,7 +159,9 @@ class HenryTableViewController: UITableViewController {
         print ("THIS IS CELL:")
         let item = self.TableData[indexPath.row]
         //        cell.textLabel?.text = self.TableData[indexPath.row]
-        cell.textLabel?.text = item["last_name"] as? String
+        cell.textLabel?.text = item["match_id"] as? String
+//        cell.textLabel?.text = item["user_id2"] as? String
+        
         //  let item = self.names
         //        cell.textLabel?.text = item["UserId"] as? String
         //        print(self.listData.count)

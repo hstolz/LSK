@@ -41,10 +41,10 @@
             </objects>
             <point key="canvasLocation" x="857" y="135"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Henry Table View Controller-->
         <scene sceneID="XCx-74-mCh">
             <objects>
-                <tableViewController id="ImS-sg-7VV" sceneMemberID="viewController">
+                <tableViewController id="ImS-sg-7VV" customClass="HenryTableViewController" customModule="UserLogin_Reg" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ItS-ij-9wQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

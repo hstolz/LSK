@@ -82,7 +82,7 @@ class RegisterPageViewController: UIViewController {
         var userUrlRequest = URLRequest(url: userUrl)
         userUrlRequest.httpMethod = "POST"
         let newUser: [String: Any] =
-            ["last_name": userEmail, "known_lang": "eng", "first_name": userPassword, "learn_lang": "chi", "user_id": 5, "user_name": userRepeatPassword, "pref_time": "2003-12-31T16:00:00Z"] //email and password, and repeatpassword are stored
+            ["last_name": userEmail, "known_lang": "eng", "first_name": userPassword, "learn_lang": "chi", "user_id": 9, "user_name": userRepeatPassword, "pref_time": "2003-12-31T16:00:00Z"] //email and password, and repeatpassword are stored
         let jsonUser: Data
         do {
             jsonUser = try JSONSerialization.data(withJSONObject: newUser, options: [])
@@ -91,6 +91,9 @@ class RegisterPageViewController: UIViewController {
             print ("ERROR: cannot create JSON from new user")
             return
         }
+        
+        print ("THIS IS JSON USER")
+        print (newUser)
         let session = URLSession.shared
         let task = session.dataTask(with: userUrlRequest) {
             (data, response, error) in
@@ -99,6 +102,9 @@ class RegisterPageViewController: UIViewController {
                 print (error)
                 return
             }
+            print ("THIS IS DATA")
+//            print (datas)
+            print ("NO MORE DATA")
             guard let responseData = data else {
                 print ("Error: did not receive data")
                 return
@@ -107,11 +113,14 @@ class RegisterPageViewController: UIViewController {
             // parse the result as JSON, since that's what the API provides
             do {
                 guard let receivedUser = try JSONSerialization.jsonObject(with: responseData,
-                                                                          options: []) as? [String: Any] else {
+                                                                          options: []) as? [String:Any] else {
                                                                             print("Could not get JSON from responseData as dictionary")
                                                                             return
                 }
                 print("The todo is: " + receivedUser.description)
+                print(receivedUser["last_name"])
+                print(receivedUser["first_name"])
+                print(receivedUser["known_lang"])
                 
                 guard let userId = receivedUser["last_name"] as? String else {
                     print("Could not get email from JSON")
