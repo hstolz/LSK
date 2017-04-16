@@ -85,6 +85,9 @@ if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
             'NAME': 'wu_db',
             'USER': 'wu_user',
             'PASSWORD': 'wu_password',
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            },
         }
     }
 else:
@@ -100,6 +103,9 @@ else:
             'NAME': 'wu_db',
             'USER': 'wu_user',
             'PASSWORD': 'wu_password',
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            },
 
             # below is what we were using when running ~locally~ (?)
             # 'ENGINE': 'django.db.backends.sqlite3',

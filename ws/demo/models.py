@@ -1,10 +1,11 @@
 from django.db import models
-
+# need to do from django.conf import settings (settings.LANGUAGES)
 
 LANGUAGE_CHOICES = (('eng', 'English'), ('chi', 'Mandarin'), ('spa', 'Spanish'))
 
 
 class Profile(models.Model):
+    # need to update to user_id = models.AutoField(primary_key=True)
     user_id = models.IntegerField(primary_key=True)
     user_name = models.CharField(max_length=100, default='')
     first_name = models.CharField(max_length=100, default='')
@@ -19,6 +20,7 @@ class Profile(models.Model):
 
 
 class Match(models.Model):
+    # need to update to match_id = models.AutoField(primary_key=True)
 	match_id = models.IntegerField(primary_key=True)
 	user_id1 = models.ForeignKey(Profile, related_name='initiator', on_delete=models.CASCADE)
 	user_id2 = models.ForeignKey(Profile, related_name='acceptor', on_delete=models.CASCADE)

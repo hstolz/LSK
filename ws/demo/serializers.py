@@ -6,8 +6,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ('user_id', 'user_name', 'first_name', 'last_name', 'pref_time', 'known_lang', 'learn_lang')
 
-
-class MatchSerializer(serializers.HyperlinkedModelSerializer):
+class MatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
         fields = ('match_id', 'user_id1', 'user_id2')
