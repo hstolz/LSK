@@ -25,16 +25,13 @@ class MatchList(generics.ListCreateAPIView):
 
 	def create(self, request):
 		data = json.loads(request.body)
-		print data
-		user_id = data['user_id']
-		print user_id
+		user_name = data.get('user_name')
 		learn_lang = data.get('learn_lang')
-		print learn_lang
-		initiator = Profile.objects.get(user_id=user_id)
+		initiator = Profile.objects.get(user_name=user_name)
 		match = Profile.objects.filter(known_lang__exact=learn_lang).order_by('?')
 		if len(match) > 0:
 			acceptor = match[0]
-			m = Match(match_id=0, user_id1=initiator, user_id2=acceptor)
+			m = Match(user_id1=initiator, user_id2=acceptor)
 			try:
 				m.save()
 				return Response(status=status.HTTP_201_CREATED)
