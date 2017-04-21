@@ -8,6 +8,9 @@
 
 import UIKit
 import Foundation
+import Alamofire
+import SwiftyJSON
+
 
 class HenryTableViewController: UITableViewController {
     
@@ -16,111 +19,181 @@ class HenryTableViewController: UITableViewController {
     //------------------------------------------------------------------//
     //    var TableData:Array< String > = Array <String>()
     var TableData = [[String: AnyObject]]() // new int array to save post item
+    var MatchTable = [[String: Int]]()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // SHADY POST //
         // =============================================================// 
+    
+        print("POSTING NOW")
         
-        //////POST!!!!
-        print("POSTIN")
+        let todosEndpoint: String = "https://wordup-163921.appspot.com/matches/"
+        let newTodo: [String: Any] = ["learn_lang": "chi", "i_user_name": "hstolz"]
+        
+        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo, encoding: JSONEncoding.default)
+            .response { response in
+               // debugPrint(response)
+            print(response.request)  // original URL request
+            print(response.response) // HTTP URL response
+            print(response.data)     // server data
+            
+
+        }
         //let url:String = "https://jsonplaceholder.typicode.com/todos/1"
-        let userEndpoint = "https://wordup-163921.appspot.com/matches/"
+        // let userEndpoint = "https://wordup-163921.appspot.com/matches/"
         
         //        let urlURL = URL(string: url)
-        
-        guard let userUrl = URL(string: userEndpoint) else {
-            print ("Error: cannot create url")
-            return
-        }
-        var userUrlRequest = URLRequest(url: userUrl)
-        userUrlRequest.httpMethod = "POST"
-        let newUser: [String: Any] =
-            ["last_name": "stolz", "known_lang": "eng", "first_name": "henry", "learn_lang": "chi", "user_id": 0, "user_name": "hstolz", "pref_time": "2003-12-31T16:00:00Z"]
+//        guard let userUrl = URL(string: userEndpoint) else {
+//            print ("Error: cannot create url")
+//            return
+//        }
+//        
+//        print("Make the URL reqest")
+//        var userUrlRequest = URLRequest(url: userUrl)
+//        userUrlRequest.httpMethod = "POST"
+//        let newUser: [String: Any] =
+//            ["last_name": "stolz", "known_lang": "eng", "first_name": "henry", "learn_lang": "chi", "user_id": 0, "user_name": "hstolz", "pref_time": "2003-12-31T16:00:00Z"]
         //email and password, and repeatpassword are stored
-        let jsonUser: Data
-        do {
-            jsonUser = try JSONSerialization.data(withJSONObject: newUser, options: [])
-            userUrlRequest.httpBody = jsonUser
-        } catch{
-            print ("ERROR: cannot create JSON from new user")
-            return
-        }
-        let session = URLSession.shared
-        var task = session.dataTask(with: userUrlRequest) {
-            (data, response, error) in
-            guard error == nil else {
-                print ("error calling POST")
-                print (error)
-                return
-            }
-            guard let responseData = data else {
-                print ("Error: did not receive data")
-                return
-            }
-            
-            // parse the result as JSON, since that's what the API provides
-            do {
-                print ("GOING INTO DO WHILE")
+        
+        // NEW POST
+        
+//        let userEndpoint: String = "https://wordup-163921.appspot.com/matches/"
+//        guard let userURL = URL(string: userEndpoint) else {
+//            print("Error: cannot create URL")
+//            return
+//        }
+//        var todosUrlRequest = URLRequest(url: userURL)
+//        todosUrlRequest.httpMethod = "POST"
+//        let newTodo: [String: Any] =
+//            ["last_name": "stolz", "known_lang": "eng", "first_name": "henry", "learn_lang": "chi", "user_id": 0, "user_name": "hstolz", "pref_time": "2003-12-31T16:00:00Z"]
+//        
+//        let jsonTodo: Data
+//        do {
+//            jsonTodo = try JSONSerialization.data(withJSONObject: newTodo, options: [])
+//            todosUrlRequest.httpBody = jsonTodo
+//        } catch {
+//            print("Error: cannot create JSON from todo")
+//            return
+//        }
+//        
+//        let session = URLSession.shared
+//        let task = session.dataTask(with: todosUrlRequest) { _, _, _ in }
+//        task.resume()
+//        
+//        print ("gottem!")
+        
+//        let jsonUser: Data
+//        do {
+//            jsonUser = try JSONSerialization.data(withJSONObject: newUser, options: [])
+//            userUrlRequest.httpBody = jsonUser
+//        } catch{
+//            print ("ERROR: cannot create JSON from new user")
+//            return
+//        }
+//        
+//        print("are we even here?")
+//        
+//        let session = URLSession.shared
+//        var task = session.dataTask(with: userUrlRequest) {
+//            (data, response, error) in
+//            guard error == nil else {
+//                print ("error calling POST")
+//                print (error)
+//                return
+//            }
+//            guard let responseData = data else {
+//                print ("Error: did not receive data")
+//                return
+//            }
+//            
+//        print("about to go to do while")
+//        // parse the result as JSON, since that's what the API provides
+//        do {
+//            print ("GOING INTO DO WHILE")
+//                
+//            guard let receivedUser = try JSONSerialization.jsonObject(with: responseData,
+//                                                                          options: []) as? [String: Any]
+//                else {
+//                    print("Could not get JSON from responseData as dictionary")
+//                    return
+//                }
+//                
+//            print("The todo is: " + receivedUser.description)
+//            print(receivedUser["match_id"])
+//                
+//            guard let userId = receivedUser["match_id"] as? Int else {
+//                print("Could not get email from JSON")
+//                return
+//                }
+//                
+//            print("The ID is: \(userId)")
+//            }
+//            
+//        catch  {
+//            print("error parsing response from POST on /todos")
+//            return
+//        }
+//    }
+//    task.resume()
+//          
+        
+        
+//        // GET //
+//        //------------------------------------------------------------------//
+//        
+//        print("GETTING")
+//        
+//        let url:String = "https://wordup-163921.appspot.com/matches/"
+        
+        let todoEndpoint: String = "https://wordup-163921.appspot.com/matches/"
+        Alamofire.request(todoEndpoint)
+            .responseJSON { response in
+                // print response as string for debugging, testing, etc.
+                print(response.result.value as! NSArray)
+                print(response.result.error)
+                print(response.request)  // original URL request
+                print(response.response) // HTTP URL response
+                print(response.data)     // server data
+
                 
-                guard let receivedUser = try JSONSerialization.jsonObject(with: responseData,
-                                                                          options: []) as? [String: Any] else {
-                                                                            print("Could not get JSON from responseData as dictionary")
-                                                                            return
-                }
-                print("The todo is: " + receivedUser.description)
-                print(receivedUser["match_id"])
-                
-                guard let userId = receivedUser["match_id"] as? Int else {
-                    print("Could not get email from JSON")
-                    return
-                }
-                print("The ID is: \(userId)")
-            } catch  {
-//                print("error parsing response from POST on /todos")
-                return
-            }
-        }
-        task.resume()
-          
-        
-        
-        // GET //
-        //------------------------------------------------------------------//
-        
-        print("GETTIN")
-        
-        let url:String = "https://wordup-163921.appspot.com/matches/"
-        
-        let urlRequest = URL(string: url)
-        
-        var task2 = URLSession.shared.dataTask(with: urlRequest!, completionHandler: {
-            (data, response, error) in
-            guard error == nil else{
-                print("ERROR!!!")
-                return
-            }
-            guard let responseData = data else{
-                print("no data~~~~~")
-                return
-            }
-            
-            do {
-                              //                    print("The title is: " + todoTitle)
-                self.TableData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [[String: AnyObject]]
-                
+                self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]
+                print (self.TableData)
                 self.tableView.reloadData()
                 
-                print ("THIS IS BULLSHIT")
-                print (self.TableData)
-                
-                
-            } catch let error as NSError{
-                print(error)
-            }
-            
-        }).resume()
+        }
+
+//        
+//        let urlRequest = URL(string: url)
+//        
+//        var task2 = URLSession.shared.dataTask(with: urlRequest!, completionHandler: {
+//            (data, response, error) in
+//            guard error == nil else{
+//                print("ERROR!!!")
+//                return
+//            }
+//            guard let responseData = data else{
+//                print("no data~~~~~")
+//                return
+//            }
+//            
+//            
+//            do {
+//        
+//                self.TableData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [[String: AnyObject]]
+//
+//                self.tableView.reloadData()
+//                
+//                print ("THIS IS BULLSHIT")
+//                print (self.TableData)
+//                
+//            } catch let error as NSError{
+//                print(error)
+//            }
+//            
+//        }).resume()
    
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -153,21 +226,12 @@ class HenryTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         // Configure the cell...
-        //let item = self.listData[indexPath.row]
-        //cell.textLabel?.text = item["Ten"] as? String
-        // THATS THE FIELD NAME BOI ie usr id1
-        print ("THIS IS CELL:")
-        let item = self.TableData[indexPath.row]
-        //        cell.textLabel?.text = self.TableData[indexPath.row]
-        cell.textLabel?.text = item["match_id"] as? String
-//        cell.textLabel?.text = item["user_id2"] as? String
-        
-        //  let item = self.names
-        //        cell.textLabel?.text = item["UserId"] as? String
-        //        print(self.listData.count)
-        
-        
-        
+                let item = self.TableData[indexPath.row]
+     
+        print ("THAT MATCH_ID THO")
+        var that_int = (item["match_id"]) as! Int
+        print (that_int)
+        cell.textLabel?.text = "match id is: " + String(describing: that_int) + " yay! you got henry :)"
         
         return cell
     }

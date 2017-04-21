@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import Alamofire
 
 class ProtoTableViewController: UITableViewController {
     
@@ -19,84 +20,70 @@ class ProtoTableViewController: UITableViewController {
     var TableData = [[String: AnyObject]]()
     
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //let url:String = "https://jsonplaceholder.typicode.com/todos/1"
-        let url:String = "https://wordup-163921.appspot.com/profiles/"
-        
-        let urlRequest = URL(string: url)
-        
-        let task = URLSession.shared.dataTask(with: urlRequest!, completionHandler: {
-            (data, response, error) in
-            guard error == nil else{
-                print("ERROR!!!")
-                return
-            }
-            guard let responseData = data else{
-                print("no data~~~~~")
-                return
-            }
-            
-            do {
-                //                    self.listData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [[String: AnyObject]]
-                //
-                //                        self.tableView.reloadData()
-                //                    if let data = data,
-                //                        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                //                        let blogs = json["userId"] as? [[String: Any]] {
+        let todoEndpoint: String = "https://wordup-163921.appspot.com/profiles/"
+        Alamofire.request(todoEndpoint)
+            .responseJSON { response in
+                // print response as string for debugging, testing, etc.
+                print(response.result.value as! NSArray)
+                print(response.result.error)
                 
-                
-                //                }
-                //                    self.names = try JSONSerialization.jsonObject(with: data!) as! [String]
-                
-                
-                //                    self.tableView.reloadData()
-                
-                
-                
-                
-                //                    guard let todo = try JSONSerialization.jsonObject(with: responseData, options: .allowFragments) as? [String: AnyObject] else {
-                //                        print("error trying to convert data to JSON")
-                //                        return
-                //                    }
-                
-                
-                
-                // now we have the todo, let's just print it to prove we can access it
-                //                    print("The todo is: " + todo.description)
-                
-                // the todo object is a dictionary
-                // so we just access the title using the "title" key
-                // so check for a title and print it if we have one
-                
-                
-                
-                //                    guard let todoTitle = todo["last_name"] as? String else {
-                //                        print("Could not get todo title from JSON")
-                //                        return
-                //                    }
-                
-                
-                
-                //                    print("The title is: " + todoTitle)
-                self.TableData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [[String: AnyObject]]
-                //                    self.TableData.append(todoTitle)
-                //                    self.TableData.append("deez nuts")
-                //                    self.TableData.append("u's a bitch")
-                self.tableView.reloadData()
-                
-                print ("THIS IS BULLSHIT")
+                self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]
                 print (self.TableData)
+                self.tableView.reloadData()
+//                let restaurants = response.result.value
+//                
+//                guard let results = restaurants as? NSArray
+//                    else {
+//                        print ("cannot find key location in \(restaurants)")
+//                        return
+//                }
+//                
+//                for r in results {
+//                    self.TableData.append(r)
+//                    self.tableView.reloadData()
+//                }
                 
                 
-            } catch let error as NSError{
-                print(error)
-            }
-            
-        }).resume()
+        }
         
+//        //let url:String = "https://jsonplaceholder.typicode.com/todos/1"
+//        let url:String = "https://wordup-163921.appspot.com/profiles/"
+//        
+//        let urlRequest = URL(string: url)
+//        
+//        let task = URLSession.shared.dataTask(with: urlRequest!, completionHandler: {
+//            (data, response, error) in
+//            guard error == nil else{
+//                print("ERROR!!!")
+//                return
+//            }
+//            guard let responseData = data else{
+//                print("no data~~~~~")
+//                return
+//            }
+//            
+//            do {
+//            
+//                //                    print("The title is: " + todoTitle)
+//                self.TableData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [[String: AnyObject]]
+//                //                    self.TableData.append(todoTitle)
+//                //                    self.TableData.append("deez nuts")
+//                //                    self.TableData.append("u's a bitch")
+//                self.tableView.reloadData()
+//                
+//                print ("THIS IS BULLSHIT")
+//                print (self.TableData)
+//                
+//                
+//            } catch let error as NSError{
+//                print(error)
+//            }
+//            
+//        }).resume()
+//        
         
         
         
