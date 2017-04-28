@@ -33,59 +33,8 @@ class ProtoTableViewController: UITableViewController {
                 self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]
                 print (self.TableData)
                 self.tableView.reloadData()
-//                let restaurants = response.result.value
-//                
-//                guard let results = restaurants as? NSArray
-//                    else {
-//                        print ("cannot find key location in \(restaurants)")
-//                        return
-//                }
-//                
-//                for r in results {
-//                    self.TableData.append(r)
-//                    self.tableView.reloadData()
-//                }
-                
                 
         }
-        
-//        //let url:String = "https://jsonplaceholder.typicode.com/todos/1"
-//        let url:String = "https://wordup-163921.appspot.com/profiles/"
-//        
-//        let urlRequest = URL(string: url)
-//        
-//        let task = URLSession.shared.dataTask(with: urlRequest!, completionHandler: {
-//            (data, response, error) in
-//            guard error == nil else{
-//                print("ERROR!!!")
-//                return
-//            }
-//            guard let responseData = data else{
-//                print("no data~~~~~")
-//                return
-//            }
-//            
-//            do {
-//            
-//                //                    print("The title is: " + todoTitle)
-//                self.TableData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [[String: AnyObject]]
-//                //                    self.TableData.append(todoTitle)
-//                //                    self.TableData.append("deez nuts")
-//                //                    self.TableData.append("u's a bitch")
-//                self.tableView.reloadData()
-//                
-//                print ("THIS IS BULLSHIT")
-//                print (self.TableData)
-//                
-//                
-//            } catch let error as NSError{
-//                print(error)
-//            }
-//            
-//        }).resume()
-//        
-        
-        
         
         
         // Uncomment the following line to preserve selection between presentations
