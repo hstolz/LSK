@@ -1,7 +1,8 @@
 from django.db import models
-# need to do from django.conf import settings (settings.LANGUAGES)
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
-LANGUAGE_CHOICES = (('en', 'English'), ('zh', 'Chinese'), ('es', 'Spanish')
+LANGUAGE_CHOICES = (('en', 'English'), ('zh', 'Chinese'), ('es', 'Spanish'),
 					('ar', 'Arabic'), ('pt', 'Portuguese'), ('ru', 'Russian'),
 					('fr', 'French'), ('ja', 'Japanese'), ('it', 'Italian'),
 					('cs', 'Czech'), ('de', 'German'), ('he', 'Hebrew'), 
@@ -9,26 +10,35 @@ LANGUAGE_CHOICES = (('en', 'English'), ('zh', 'Chinese'), ('es', 'Spanish')
 					('fa', 'Persian'), ('sw', 'Swahili'), ('tr', 'Turkish'),
 					('tw', 'Twi'), ('ur', 'Urdu'), ('pl', 'Polish'))
 
-class Profile(models.Model):
-	user_id = models.AutoField(primary_key=True)
-	user_name = models.CharField(max_length=100, default='')
-	first_name = models.CharField(max_length=100, default='')
-	last_name = models.CharField(max_length=100, default='')
+class Profile(AbstractUser):
 	known_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
 	learn_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
 
 	class Meta:
 		db_table = 'profiles'
-		ordering = ('user_id',)
+		ordering = ('username',)
 
+# class Profile(models.Model):
+# 	user_id = models.AutoField(primary_key=True)
+# 	user_name = models.CharField(max_length=100, default='')
+# 	first_name = models.CharField(max_length=100, default='')
+# 	last_name = models.CharField(max_length=100, default='')
+# 	known_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
+# 	learn_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
+
+# 	class Meta:
+# 		db_table = 'profiles'
+# 		ordering = ('user_id',)
 
 class Match(models.Model):
 	match_id = models.AutoField(primary_key=True)
-	user_id1 = models.ForeignKey(Profile, related_name='initiator', on_delete=models.CASCADE)
-	user_id2 = models.ForeignKey(Profile, related_name='acceptor', on_delete=models.CASCADE)
-	time_1 = models.DateTimeField(blank=True)
-	time_2 = models.DateTimeField(blank=True)
-	time_3 = models.DateTimeField(blank=True)
+	# user_id1 = models.ForeignKey(Profile, related_name='initiator', on_delete=models.CASCADE)
+	# user_id2 = models.ForeignKey(Profile, related_name='acceptor', on_delete=models.CASCADE)
+	user_id1 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='initiator', on_delete=models.CASCADE)
+	user_id2 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acceptor', on_delete=models.CASCADE)
+	time_1 = models.DateTimeField(null=True)
+	time_2 = models.DateTimeField(null=True)
+	time_3 = models.DateTimeField(null=True)
 	status_code = models.IntegerField(default='0') 
 	#Key for status codes
 	#0 - match made, but no scheduling has occurred

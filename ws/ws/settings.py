@@ -35,10 +35,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
+    'rest_framework.authtoken',
     'demo.apps.DemoConfig',
-    'django_cas_ng',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,7 +55,6 @@ MIDDLEWARE_CLASSES = [
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'django_cas_ng.backends.CASBackend',
 ]
 
 ROOT_URLCONF = 'ws.urls'
@@ -86,7 +88,8 @@ if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'HOST': '/cloudsql/wordup-163921:us-central1:wordup-database',
-            'NAME': 'wu_db',
+            # 'NAME': 'wu_db',
+            'NAME': 'test_wu_db',
             'USER': 'wu_user',
             'PASSWORD': 'wu_password',
             'OPTIONS': {
@@ -104,7 +107,8 @@ else:
             'ENGINE': 'django.db.backends.mysql',
             'HOST': '127.0.0.1',
             'PORT': '3306',
-            'NAME': 'wu_db',
+            # 'NAME': 'wu_db',
+            'NAME': 'test_wu_db',
             'USER': 'wu_user',
             'PASSWORD': 'wu_password',
             'OPTIONS': {
@@ -132,11 +136,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# CAS Integration
-CAS_SERVER_URL = 'https://fed.princeton.edu/cas/'
-CAS_LOGIN_MSG = None
-CAS_LOGGED_MSG = None
-CAS_FORCE_CHANGE_USERNAME_CASE = 'lower'
+AUTH_USER_MODEL = 'demo.Profile'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
