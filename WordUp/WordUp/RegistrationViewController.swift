@@ -49,6 +49,13 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
                          "Persian", "Swahili", "Turkish",
                          "Twi", "Urdu", "Polish"]
     
+    func donePicker() {
+        
+        learnLangTextField.resignFirstResponder()
+        knownLangTextField.resignFirstResponder()
+        
+    }
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -89,18 +96,31 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
         
         ScrollView.contentSize.height = 1200
         
+        // NEW STUFF
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(donePicker))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(donePicker))
+        
+        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        
         let knownLangPickerView = UIPickerView()
         knownLangTextField.inputView = knownLangPickerView
+        knownLangTextField.inputAccessoryView = toolBar
         knownLangPickerView.delegate = self
         knownLangPickerView.tag = 1
         
         let learnLangPickerView = UIPickerView()
         learnLangTextField.inputView = learnLangPickerView
+        learnLangTextField.inputAccessoryView = toolBar
         learnLangPickerView.delegate = self
         learnLangPickerView.tag = 2
         
       //  print(UserDefaults.standard.string(forKey: defaultsKeys.keyOne))
-        
         
         
         // Do any additional setup after loading the view.

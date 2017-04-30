@@ -42,14 +42,16 @@ class MatchTableViewController: UITableViewController {
         
         // CLEAR GLOBAL VARS 
         
-        defaults.set("username", forKey: defaultsKeys.keyOne)
-        defaults.set("password", forKey: defaultsKeys.tokenKey)
-        let userName = defaults.string(forKey: defaultsKeys.keyOne)
+        defaults.removeObject(forKey: defaultsKeys.keyOne)
+        defaults.removeObject(forKey: defaultsKeys.tokenKey)
+        defaults.synchronize()
+        
+     let userName = defaults.string(forKey: defaultsKeys.keyOne)
         print ("WE ARE CLEARING THE USERNAME KEY")
-        print (userName!)
+        print (userName)
         let password = defaults.string(forKey: defaultsKeys.tokenKey)
         print ("WE ARE CLEARING THE TOKEN KEY")
-        print (password!)
+        print (password)
         
         
         

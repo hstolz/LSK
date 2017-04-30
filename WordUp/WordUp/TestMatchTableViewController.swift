@@ -17,6 +17,7 @@ class TestMatchTableViewController: UITableViewController {
     var MatchTable = [[String: Int]]()
     
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,96 +32,66 @@ class TestMatchTableViewController: UITableViewController {
         print(auth_header)
         
         
+        generateMatch(userNameString: userNameString, auth_header: auth_header)
+        
+        getMatches(userNameString: userNameString, auth_header: auth_header)
         
         
         
         
         
-        // SHADY POST //
-        // =============================================================//
         
-//        print("POSTING NOW")
-//        //GENERATE MATCH
-//        let todosEndpoint: String = "https://wordup-163921.appspot.com/matches/"
-//        
-//        let newTodo: [String: Any] = ["learn_lang": "zh", "known_lang": "en" ,"i_user_name": "hstolz"]
-//        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo,encoding: JSONEncoding.default, headers: auth_header)
-//            .response { response in
-//                debugPrint(response)
-//                print(response.request)  // original URL request
-//                print(response.response) // HTTP URL response
-//                print("THIS IS THE DATA")
-//                print(response.data!)     // server data
-//                
-//                
-//        }
+
         
         //        // GET //
         //        //------------------------------------------------------------------//
         //
-        print("GETTING")
+        //print("GETTING")
         //
         //        let url:String = "https://wordup-163921.appspot.com/matches/"
         
-        //GETTING MATCH THAT WAS JUST GENERATED
-        let myProfile: [String: Any] = ["username": userNameString]
-        print("THIS SHOULD BE THE USERNAME")
-        print(myProfile["username"]!)
+//        //GETTING MATCH THAT WAS JUST GENERATED
+//        let myProfile: [String: Any] = ["username": userNameString]
+//        print("THIS SHOULD BE THE USERNAME")
+//        print(myProfile["username"]!)
         let todoEndpoint: String = "https://wordup-163921.appspot.com/matches/"
-//        Alamofire.request(todoEndpoint, parameters: myProfile, encoding: JSONEncoding.default, headers: auth_header)
-        Alamofire.request(todoEndpoint, method: .get, parameters: myProfile, encoding: JSONEncoding.default, headers: auth_header)
-            .responseJSON { response in
-                
-                if let httpError = response.error {
-                    print("ERROR HERE:")
-                    let statusCode = httpError._code
-                    print(statusCode)
-                } else {
-                }
-                // print response as string for debugging, testing, etc.
-                //print(response.result.value as! NSArray)
-                //debugPrint(response)
-                print(response.result.value)
-//                print(response.result.error)
-//                print(response.request)  // original URL request
-//                print(response.response) // HTTP URL response
-//                print(response.data)     // server data
-                
-                
-//                self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]
-                print ("-------------------------THIS IS THE DATA WE HAVE!!!!!!")
-//                print (self.TableData[0]["user_id2"])
-//                for index in self.TableData {
-//                    for (key,value) in index {
-//                        if key == "user_id2" {
-//                            print (value)
-//                        }
-//                    }
-//                }
-//                
-//                
-                self.tableView.reloadData()
-//
-        }
-        
-        //FIND USER NAME
-//        let userNameEndpoint: String = "https://wordup-163921.appspot.com/matches/"
-//        Alamofire.request(todoEndpoint, headers: auth_header)
+////        Alamofire.request(todoEndpoint, parameters: myProfile, encoding: JSONEncoding.default, headers: auth_header)
+//        Alamofire.request(todoEndpoint, method: .get, parameters: myProfile, encoding: JSONEncoding.default, headers: auth_header)
 //            .responseJSON { response in
+//                
+//                if let httpError = response.error {
+//                    print("ERROR HERE:")
+//                    let statusCode = httpError._code
+//                    print(statusCode)
+//                } else {
+//                    print("Hey Whats Up Hello, why are we here?")
+//                }
 //                // print response as string for debugging, testing, etc.
-//                print(response.result.value as! NSArray)
-//                print(response.result.error)
-//                print(response.request)  // original URL request
-//                print(response.response) // HTTP URL response
-//                print(response.data)     // server data
+//                //print(response.result.value as! NSArray)
+//                //debugPrint(response)
+//                print(response.result.value)
+////                print(response.result.error)
+////                print(response.request)  // original URL request
+////                print(response.response) // HTTP URL response
+////                print(response.data)     // server data
 //                
 //                
-//                self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]
-//                print ("THIS IS THE MATCH ID!!!!!!")
-//                print (self.TableData)
+////                self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]
+//                print ("-------------------------THIS IS THE DATA WE HAVE!!!!!!")
+////                print (self.TableData[0]["user_id2"])
+////                for index in self.TableData {
+////                    for (key,value) in index {
+////                        if key == "user_id2" {
+////                            print (value)
+////                        }
+////                    }
+////                }
+////                
+////                
 //                self.tableView.reloadData()
-//                
+////
 //        }
+        
         
         
         
@@ -133,6 +104,55 @@ class TestMatchTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+    
+    
+    func generateMatch(userNameString: String, auth_header: Dictionary<String, String>) {
+        
+        // SHADY POST //
+        // =============================================================//
+        
+        print("POSTING NOW")
+        //GENERATE MATCH
+        let todosEndpoint: String = "https://wordup-163921.appspot.com/matches/"
+        
+        let newTodo: [String: Any] = ["i_username": userNameString ]
+        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo,encoding: JSONEncoding.default, headers: auth_header)
+            .responseJSON { response in
+                //debugPrint(response)
+                //print(response.request)  // original URL request
+                //print(response.response) // HTTP URL response
+                //print("THIS IS THE DATA")
+                print(response.data!)     // server data
+                print("THE POST RESPONSE JSON?")
+                print(response.result.value as! NSDictionary)
+        }
+        
+        
+    }
+    
+    func getMatches(userNameString: String, auth_header: Dictionary<String, String>) {
+        
+        let userNameEndpoint: String = "https://wordup-163921.appspot.com/matches/"
+        Alamofire.request(userNameEndpoint, headers: auth_header)
+            .responseJSON { response in
+                // print response as string for debugging, testing, etc.
+                print(response.result.value as! NSArray)
+                print(response.result.error)
+                print(response.request)  // original URL request
+                print(response.response) // HTTP URL response
+                print(response.data)     // server data
+                
+                
+                self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]
+                print ("THIS IS THE MATCH ID!!!!!!")
+                print (self.TableData)
+                self.tableView.reloadData()
+                
+        }
+        
+    }
+    
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -161,9 +181,10 @@ class TestMatchTableViewController: UITableViewController {
         let item = self.TableData[indexPath.row]
         
         print ("THAT MATCH_ID THO")
-        var that_int = (item["match_id"]) as! Int
-        print (that_int)
-        cell.textLabel?.text = "match id is: " + String(describing: that_int) + " yay! you got henry :)"
+        var first_name = (item["first_name"]) as! String
+        var last_name = item["last_name"] as! String
+        print (first_name + last_name)
+        cell.textLabel?.text = "You matched with " + first_name + " " + last_name
         
         return cell
     }
