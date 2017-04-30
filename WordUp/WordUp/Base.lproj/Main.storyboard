@@ -76,6 +76,16 @@
                                         </connections>
                                     </button>
                                 </barButtonItem>
+                                <barButtonItem style="plain" id="r0i-C0-Qsj">
+                                    <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5L1-hp-lfo">
+                                        <rect key="frame" x="100" y="7" width="49" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="GTFO! "/>
+                                        <connections>
+                                            <segue destination="bc9-ge-aRO" kind="showDetail" id="sJ4-Il-eX4"/>
+                                        </connections>
+                                    </button>
+                                </barButtonItem>
                             </items>
                         </toolbar>
                         <prototypes>
