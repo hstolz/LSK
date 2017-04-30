@@ -23,7 +23,7 @@ SECRET_KEY = 'dc)te@vombxyf_15tlc28t_%_17di=f!4rp4@0c3g@m#olv1t!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://wordup-163921.appspot.com']
 
 
 # Application definition
@@ -56,6 +56,12 @@ MIDDLEWARE_CLASSES = [
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 ROOT_URLCONF = 'ws.urls'
 

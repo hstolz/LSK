@@ -2,11 +2,38 @@ from demo.models import Profile, Match
 from demo.serializers import ProfileSerializer, MatchSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.contrib.auth import authenticate
+from django.db import IntegrityError
 import json
+
+def check_ios(request):
+	return request.META['HTTP_USER_AGENT'] == 'iPhone'
 
 class ProfileList(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+    # def create(self, request):
+    # 	data = json.loads(request.body)
+    # 	p_password = data.get('password')
+    # 	p_username = data.get('username')
+    # 	p_first_name = data.get('first_name')
+    # 	p_last_name = data.get('last_name')
+    # 	p_email = data.get('email')
+    # 	p_known_lang = data.get('known_lang')
+    # 	p_learn_lang = data.get('learn_lang')
+    # 	p = Profile.objects.create_user(password=p_password, username=p_username, 
+    # 									first_name=p_first_name, last_name=p_last_name, 
+    # 									email=p_email, known_lang=p_known_lang, learn_lang=p_learn_lang)
+    # 	try:
+    # 		p.save()
+    # 	except (ValidationError, IntegrityError) as e: # ValueError?
+    # 		return Response(data=e.message, status=status.HTTP_400_BAD_REQUEST)
+    # 	else:
+    # 		return Response(status=status.HTTP_201_CREATED)
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
@@ -17,6 +44,9 @@ class MatchList(generics.ListCreateAPIView):
 	serializer_class = MatchSerializer
 
 	def create(self, request):
+		if not settings.DEBUG and not check_ios(request):
+			return Response(data='not an iPhone', status=status.HTTP_400_BAD_REQUEST)
+
 		data = json.loads(request.body)
 		i_user_name = data.get('i_user_name')
 		a_user_name = data.get('a_user_name')
@@ -53,3 +83,19 @@ class MatchList(generics.ListCreateAPIView):
 class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Match.objects.all()
 	serializer_class = MatchSerializer
+
+class Login(generics.CreateAPIView):
+	queryset = Profile.objects.all()
+	serializer_class = ProfileSerializer
+
+	def create(self, request):
+		data = json.loads(request.body)
+		username = data.get('username')
+		password = data.get('password')
+
+		user = authenticate(username=username, password=password)
+		if user is not None:
+			token = Token.objects.create(user=user)
+			return Response(data=token, status=status.HTTP_200_OK)
+		else:
+			return Response(data='login failed', status=status.HTTP_401_UNAUTHORIZED)
