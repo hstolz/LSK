@@ -1,5 +1,5 @@
 //
-//  ProtoTableViewController.swift
+//  TestMatchTableViewController.swift
 //  WordUp
 //
 //  Created by Jacky Kong on 4/29/17.
@@ -9,13 +9,14 @@
 import UIKit
 import Foundation
 import Alamofire
+import SwiftyJSON
 
-class ProtoTableViewController: UITableViewController {
+class TestMatchTableViewController: UITableViewController {
     
-    var listData = [[String: AnyObject]]()
-    var names = [String]()
-    var TableData = [[String: AnyObject]]()
-
+    var TableData = [[String: AnyObject]]() // new int array to save post item
+    var MatchTable = [[String: Int]]()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,59 +28,140 @@ class ProtoTableViewController: UITableViewController {
         print(auth_header)
         
         
-
         
-        let todoEndpoint: String = "https://wordup-163921.appspot.com/profiles/"
+        
+        
+        
+        
+        // SHADY POST //
+        // =============================================================//
+        
+        print("POSTING NOW")
+        //GENERATE MATCH
+        let todosEndpoint: String = "https://wordup-163921.appspot.com/matches/"
+        
+        let newTodo: [String: Any] = ["learn_lang": "zh", "known_lang": "en" ,"i_user_name": "hstolz"]
+        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo,encoding: JSONEncoding.default, headers: auth_header)
+            .response { response in
+                debugPrint(response)
+                print(response.request)  // original URL request
+                print(response.response) // HTTP URL response
+                print("THIS IS THE DATA")
+                print(response.data!)     // server data
+                
+                
+        }
+        
+        //        // GET //
+        //        //------------------------------------------------------------------//
+        //
+        print("GETTING")
+        //
+        //        let url:String = "https://wordup-163921.appspot.com/matches/"
+        
+        //GETTING MATCH THAT WAS JUST GENERATED
+        let todoEndpoint: String = "https://wordup-163921.appspot.com/matches/"
         Alamofire.request(todoEndpoint, headers: auth_header)
             .responseJSON { response in
                 // print response as string for debugging, testing, etc.
                 print(response.result.value as! NSArray)
                 print(response.result.error)
+                print(response.request)  // original URL request
+                print(response.response) // HTTP URL response
+                print(response.data)     // server data
+                
                 
                 self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]
-                print (self.TableData)
+                print ("-------------------------THIS IS THE DATA WE HAVE!!!!!!")
+//                print (self.TableData[0]["user_id2"])
+                for index in self.TableData {
+                    for (key,value) in index {
+                        if key == "user_id2" {
+                            print (value)
+                        }
+                    }
+                }
+                
+                
                 self.tableView.reloadData()
                 
         }
-
+        
+        //FIND USER NAME
+//        let userNameEndpoint: String = "https://wordup-163921.appspot.com/matches/"
+//        Alamofire.request(todoEndpoint, headers: auth_header)
+//            .responseJSON { response in
+//                // print response as string for debugging, testing, etc.
+//                print(response.result.value as! NSArray)
+//                print(response.result.error)
+//                print(response.request)  // original URL request
+//                print(response.response) // HTTP URL response
+//                print(response.data)     // server data
+//                
+//                
+//                self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]
+//                print ("THIS IS THE MATCH ID!!!!!!")
+//                print (self.TableData)
+//                self.tableView.reloadData()
+//                
+//        }
+        
+        
+        
+        
+        
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
+        
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        //return self.listData.count
         return self.TableData.count
     }
-
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         // Configure the cell...
         let item = self.TableData[indexPath.row]
         
-        //        cell.textLabel?.text = self.TableData[indexPath.row]
-        cell.textLabel?.text = item["last_name"] as? String
-        //        print(self.listData.count)
-
+        print ("THAT MATCH_ID THO")
+        var that_int = (item["match_id"]) as! Int
+        print (that_int)
+        cell.textLabel?.text = "match id is: " + String(describing: that_int) + " yay! you got henry :)"
+        
         return cell
     }
 
+    
+    /*
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+
+        // Configure the cell...
+
+        return cell
+    }
+    */
 
     /*
     // Override to support conditional editing of the table view.

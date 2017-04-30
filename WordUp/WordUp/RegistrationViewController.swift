@@ -165,7 +165,7 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
         
         
         
-        let todosEndpoint: String = "https://wordup-163921.appspot.com/profiles/"
+        let todosEndpoint: String = "https://wordup-163921.appspot.com/register/"
         let newTodo: [String: Any] = ["last_name": userLastName, "known_lang": userKnownLang, "first_name": userFirstName, "learn_lang": userLearnLang, "username": userNameText, "password" : userPassword , "email": userEmail ]
         
         print("THAT EMAILLLLLL: " + userEmail!)

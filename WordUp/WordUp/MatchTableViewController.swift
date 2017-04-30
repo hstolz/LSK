@@ -7,9 +7,55 @@
 //
 
 import UIKit
+import Foundation
+import Alamofire
+
 
 class MatchTableViewController: UITableViewController {
 
+    @IBAction func logoutButtonTapped(_ sender: Any) {
+        print("HEY WHATS UP HELLO~~")
+        
+        // POST WITH TOKEN 
+        let todosEndpoint: String = "https://wordup-163921.appspot.com/logout/"
+        let newTodo: [String: Any] = [:]
+        
+//        print(loginUserNameTextField.text)
+//        print(loginPasswordTextField.text)
+        
+        let defaults = UserDefaults.standard
+        let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)!
+        let auth_header = ["Authorization" : "Token " + tokenString]
+        
+        
+        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo, encoding: JSONEncoding.default, headers: auth_header)
+            .response { response in // was .responseJSON
+                if let httpError = response.error {
+                    print("ERROR HERE:")
+                    let statusCode = httpError._code
+                    print(statusCode)
+                } else {
+  
+                }
+                
+        }
+        
+        // CLEAR GLOBAL VARS 
+        
+        defaults.set("username", forKey: defaultsKeys.keyOne)
+        defaults.set("password", forKey: defaultsKeys.tokenKey)
+        let userName = defaults.string(forKey: defaultsKeys.keyOne)
+        print ("WE ARE CLEARING THE USERNAME KEY")
+        print (userName!)
+        let password = defaults.string(forKey: defaultsKeys.tokenKey)
+        print ("WE ARE CLEARING THE TOKEN KEY")
+        print (password!)
+        
+        
+        
+        
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -18,6 +64,11 @@ class MatchTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        let defaults = UserDefaults.standard
+        let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)
+        print("GIMME DAT TOKEN B")
+        print(tokenString)
+        print("WE GUCCI")
     }
 
     override func didReceiveMemoryWarning() {
