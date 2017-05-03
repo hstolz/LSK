@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token 
+
 
 LANGUAGE_CHOICES = (('en', 'English'), ('zh', 'Chinese'), ('es', 'Spanish'),
 					('ar', 'Arabic'), ('pt', 'Portuguese'), ('ru', 'Russian'),
@@ -10,6 +14,13 @@ LANGUAGE_CHOICES = (('en', 'English'), ('zh', 'Chinese'), ('es', 'Spanish'),
 					('fa', 'Persian'), ('sw', 'Swahili'), ('tr', 'Turkish'),
 					('tw', 'Twi'), ('ur', 'Urdu'), ('pl', 'Polish'))
 
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+
+
 class Profile(AbstractUser):
 	known_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
 	learn_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
@@ -18,22 +29,9 @@ class Profile(AbstractUser):
 		db_table = 'profiles'
 		ordering = ('username',)
 
-# class Profile(models.Model):
-# 	user_id = models.AutoField(primary_key=True)
-# 	user_name = models.CharField(max_length=100, default='')
-# 	first_name = models.CharField(max_length=100, default='')
-# 	last_name = models.CharField(max_length=100, default='')
-# 	known_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
-# 	learn_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
-
-# 	class Meta:
-# 		db_table = 'profiles'
-# 		ordering = ('user_id',)
 
 class Match(models.Model):
 	match_id = models.AutoField(primary_key=True)
-	# user_id1 = models.ForeignKey(Profile, related_name='initiator', on_delete=models.CASCADE)
-	# user_id2 = models.ForeignKey(Profile, related_name='acceptor', on_delete=models.CASCADE)
 	user_id1 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='initiator', on_delete=models.CASCADE)
 	user_id2 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acceptor', on_delete=models.CASCADE)
 	time_1 = models.DateTimeField(null=True)

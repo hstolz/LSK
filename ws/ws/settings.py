@@ -41,16 +41,16 @@ INSTALLED_APPS = [
     'demo.apps.DemoConfig',
 ]
 
-SITE_ID = 1
-
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', # necessary?
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'demo.middleware.CustomCsrfViewMiddleware', # necessary?
+    'demo.middleware.CustomSessionMiddleware', # necessary?
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -60,10 +60,15 @@ AUTHENTICATION_BACKENDS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
     ]
 }
 
 ROOT_URLCONF = 'ws.urls'
+SITE_ID = 1
 
 TEMPLATES = [
     {
@@ -143,6 +148,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'demo.Profile'
+LOGIN_URL = '/login/'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

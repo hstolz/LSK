@@ -6,11 +6,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ('username', 'password', 'first_name', 'last_name', 'email', 'known_lang', 'learn_lang')
 
-# class ProfileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Profile
-#         fields = ('user_id', 'user_name', 'first_name', 'last_name', 'known_lang', 'learn_lang')
-
 class MatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
