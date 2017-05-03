@@ -1,5 +1,5 @@
 from demo.models import Profile, Match
-from demo.serializers import ProfileSerializer, MatchSerializer
+from demo.serializers import RegistrationSerializer, ProfileSerializer, MatchSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -18,7 +18,7 @@ import json
 @permission_classes([])
 class Register(generics.CreateAPIView):
 	queryset = Profile.objects.all()
-	serializer_class = ProfileSerializer
+	serializer_class = RegistrationSerializer
 
 	def create(self, request):
 		data = json.loads(request.body)
@@ -39,7 +39,6 @@ class Register(generics.CreateAPIView):
 			return Response(status=status.HTTP_201_CREATED)
 
 
-# LoginRequiredMixin needed
 class ProfileList(generics.ListAPIView):
 	queryset = Profile.objects.all()
 	serializer_class = ProfileSerializer
@@ -50,26 +49,23 @@ class ProfileList(generics.ListAPIView):
 			initiator = Profile.objects.get(username=username)
 		except:
 			return Response(data='initiator not found', status=status.HTTP_400_BAD_REQUEST)
-		else:
-			c1 = Q(user_id1=initiator.id)
-			c2 = Q(user_id2=initiator.id)
-			matches = Match.objects.filter(c1 | c2)
-			ids = [m.user_id1.id if m.user_id1 != initiator else m.user_id2.id for m in matches]
-			c3 = Q(pk__in=ids)
-			c4 = Q(learn_lang=initiator.known_lang)
-			c5 = Q(known_lang=initiator.learn_lang)
-			profiles = (Profile.objects.exclude(c3)).filter(c4 & c5)
-			serializer = ProfileSerializer(profiles, many=True)
-			return Response(serializer.data, status=status.HTTP_200_OK)
+		c1 = Q(user_id1=initiator.id)
+		c2 = Q(user_id2=initiator.id)
+		matches = Match.objects.filter(c1 | c2)
+		ids = [m.user_id1.id if m.user_id1 != initiator else m.user_id2.id for m in matches]
+		c3 = Q(pk__in=ids)
+		c4 = Q(learn_lang=initiator.known_lang)
+		c5 = Q(known_lang=initiator.learn_lang)
+		profiles = (Profile.objects.exclude(c3)).filter(c4 & c5)
+		serializer = ProfileSerializer(profiles, many=True)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# LoginRequiredMixin needed
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Profile.objects.all()
 	serializer_class = ProfileSerializer
 
 
-# LoginRequiredMixin needed
 class MatchList(generics.ListCreateAPIView):
 	queryset = Profile.objects.all()
 	serializer_class = ProfileSerializer
@@ -80,72 +76,117 @@ class MatchList(generics.ListCreateAPIView):
 			initiator = Profile.objects.get(username=username)
 		except:
 			return Response(data='initiator not found', status=status.HTTP_400_BAD_REQUEST)
-		else:
-			# t1 = Q(initiator=initiator.id)
-			# t2 = Q(acceptor=initiator.id)
-			# test = Profile.objects.all(t1 | t2)
-			# http://stackoverflow.com/questions/12087696/using-related-name-correctly-in-django
-			# http://stackoverflow.com/questions/5734377/filter-for-elements-using-exists-through-a-reverse-fk
-			c1 = Q(user_id1=initiator.id)
-			c2 = Q(user_id2=initiator.id)
-			matches = Match.objects.filter(c1 | c2)
-			ids = [m.user_id1.id if m.user_id1 != initiator else m.user_id2.id for m in matches]
-			profiles = Profile.objects.filter(pk__in=ids)
-			serializer = ProfileSerializer(profiles, many=True)
-			return Response(serializer.data, status=status.HTTP_200_OK)
+		# t1 = Q(initiator=initiator.id)
+		# t2 = Q(acceptor=initiator.id)
+		# test = Profile.objects.all(t1 | t2)
+		# http://stackoverflow.com/questions/12087696/using-related-name-correctly-in-django
+		# http://stackoverflow.com/questions/5734377/filter-for-elements-using-exists-through-a-reverse-fk
+		c1 = Q(user_id1=initiator.id)
+		c2 = Q(user_id2=initiator.id)
+		matches = Match.objects.filter(c1 | c2)
+		ids = [m.user_id1.id if m.user_id1 != initiator else m.user_id2.id for m in matches]
+		profiles = Profile.objects.filter(pk__in=ids)
+		serializer = ProfileSerializer(profiles, many=True)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 	def create(self, request):
 		data = json.loads(request.body)
 		i_username = data.get('i_username')
 		a_username = data.get('a_username')
-		time_1 	   = data.get('time_1')
-		time_2 	   = data.get('time_2')
-		time_3 	   = data.get('time_3')
 
 		try:
 			initiator = Profile.objects.get(username=i_username)
 		except:
 			return Response(data='initiator not found', status=status.HTTP_400_BAD_REQUEST)
-		else:
-			if a_username:
-				try:
-					acceptor = Profile.objects.get(username=a_username)
-					# need to also ensure that they don't make a duplicate match with the same user!
-				except:
-					return Response(data='acceptor not found', status=status.HTTP_400_BAD_REQUEST)
-			else:
-				c1 = Q(user_id1=initiator.id)
-				c2 = Q(user_id2=initiator.id)
-				matches = Match.objects.filter(c1 | c2)
-				ids = [m.user_id1.id if m.user_id1 != initiator else m.user_id2.id for m in matches]
-				strangers = Profile.objects.exclude(pk__in=ids) # only filter within unmatched people
-				c3 = Q(known_lang__exact=initiator.learn_lang)
-				c4 = Q(learn_lang__exact=initiator.known_lang)
-				acceptor = strangers.filter(c3 & c4).order_by('?')
 
-				if len(acceptor) > 0:
-					acceptor = acceptor[0]
-				else:
-					return Response(data='acceptor not found', status=status.HTTP_400_BAD_REQUEST)
-
-			m = Match(user_id1=initiator, user_id2=acceptor)
+		if a_username:
 			try:
-				m.save()
+				acceptor = Profile.objects.get(username=a_username)
 			except:
-				return Response(data='could not create match', status=status.HTTP_400_BAD_REQUEST)
-			else:
-				serializer = ProfileSerializer(acceptor)
-				return Response(serializer.data, status=status.HTTP_201_CREATED)
+				return Response(data='acceptor not found', status=status.HTTP_400_BAD_REQUEST)
+			c1 = Q(user_id1=acceptor.id)
+			c2 = Q(user_id2=initiator.id)
+			c3 = Q(user_id1=acceptor.id)
+			c4 = Q(user_id2=initiator.id)
+			matches = Match.objects.filter((c1 & c2) | (c3 & c4))
+			if len(matches) > 0: # prevent re-match
+				return Response(data='users are already matched', status=status.HTTP_400_BAD_REQUEST)
+		else:
+			c1 = Q(user_id1=initiator.id)
+			c2 = Q(user_id2=initiator.id)
+			matches = Match.objects.filter(c1 | c2)
+			ids = [m.user_id1.id if m.user_id1 != initiator else m.user_id2.id for m in matches]
+			strangers = Profile.objects.exclude(pk__in=ids) # only filter within unmatched people
+			c3 = Q(known_lang__exact=initiator.learn_lang)
+			c4 = Q(learn_lang__exact=initiator.known_lang)
+			acceptor = strangers.filter(c3 & c4).order_by('?')
 
-# LoginRequiredMixin needed
+			if len(acceptor) > 0:
+				acceptor = acceptor[0]
+			else:
+				return Response(data='no eligible users remaining', status=status.HTTP_400_BAD_REQUEST)
+
+		m = Match(user_id1=initiator, user_id2=acceptor)
+		try:
+			m.save()
+		except:
+			return Response(data='could not create match', status=status.HTTP_400_BAD_REQUEST)
+		serializer = ProfileSerializer(acceptor)
+		return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Match.objects.all()
 	serializer_class = MatchSerializer
 
-	# def retrieve(self, request):
-	# 	data = json.loads(request.body)
-	# 	username = data.get('username')
+	def check(self, username, pk):
+		try:
+			user = profile.objects.get(username=username)
+		except:
+			return (None, 'user not found', status.HTTP_400_BAD_REQUEST)
+		try:
+			match = match.objects.get(pk=pk)
+		except:
+			return (None, 'match not found', status.HTTP_404_NOT_FOUND)
+		if match.user_id1 != user.id and match.user_id2 != user.id:
+			return (None, 'not a member of this match', status.HTTP_403_FORBIDDEN)
+		return (match, None, None)
 
+	def retrieve(self, request, pk):
+		username = request.user.get_username()
+		(match, msg, code) = self.check(username, pk)
+		if match is None:
+			return Response(data=msg, status=code)
+		serializer = MatchSerializer(match)
+		return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+	def update(self, request, pk):
+		data = json.loads(request.body)
+		username = data.get('username')
+		time_1 	   = data.get('time_1')
+		time_2 	   = data.get('time_2')
+		time_3 	   = data.get('time_3')
+		new_status = data.get('new_status')
+		(match, msg, code) = self.check(username, pk)
+		if match is None:
+			return Response(data=msg, status=code)
+		else:
+			# fill this in pls
+			serializer = MatchSerializer(new_match)
+			return Response(serializer.data, status=status.HTTP_200_OK)
+
+	def destroy(request, pk):
+		data = json.loads(request.body)
+		username = data.get('username')
+		(match, msg, code) = self.check(username, pk)
+		if match is None:
+			return Response(data=msg, status=code)
+		try:
+			match.delete()
+		except:
+			return Response(data='deletion failed', status=status.HTTP_400_BAD_REQUEST)
+		return Response(status=status.HTTP_200_OK)
+		
 
 @authentication_classes([])
 @permission_classes([])
@@ -166,7 +207,6 @@ class Login(generics.CreateAPIView):
 			return Response(data='login failed', status=status.HTTP_401_UNAUTHORIZED)
 
 
-# LoginRequiredMixin needed
 class Logout(generics.CreateAPIView):
 	queryset = Profile.objects.all()
 	serializer_class = ProfileSerializer

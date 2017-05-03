@@ -99,8 +99,7 @@ if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'HOST': '/cloudsql/wordup-163921:us-central1:wordup-database',
-            # 'NAME': 'wu_db',
-            'NAME': 'test_wu_db',
+            'NAME': 'wu_db',
             'USER': 'wu_user',
             'PASSWORD': 'wu_password',
             'OPTIONS': {
@@ -118,8 +117,7 @@ else:
             'ENGINE': 'django.db.backends.mysql',
             'HOST': '127.0.0.1',
             'PORT': '3306',
-            # 'NAME': 'wu_db',
-            'NAME': 'test_wu_db',
+            'NAME': 'wu_db',
             'USER': 'wu_user',
             'PASSWORD': 'wu_password',
             'OPTIONS': {
@@ -148,7 +146,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'demo.Profile'
-LOGIN_URL = '/login/'
+# LOGIN_URL = '/login/'
 
 
 # Internationalization

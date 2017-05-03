@@ -4,6 +4,11 @@ from demo.models import Profile, Match, LANGUAGE_CHOICES
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
+        fields = ('id', 'username', 'first_name', 'last_name', 'known_lang', 'learn_lang')
+
+class RegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
         fields = ('username', 'password', 'first_name', 'last_name', 'email', 'known_lang', 'learn_lang')
 
 class MatchSerializer(serializers.ModelSerializer):
