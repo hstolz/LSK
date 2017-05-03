@@ -34,6 +34,7 @@ class ProtoTableViewController: UITableViewController {
             .responseJSON { response in
                 // print response as string for debugging, testing, etc.
                 print(response.result.value as! NSArray)
+                print(response.result.value)
                 print(response.result.error)
                 
                 self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]

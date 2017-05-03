@@ -16,6 +16,11 @@ class TestMatchTableViewController: UITableViewController {
     var TableData = [[String: AnyObject]]() // new int array to save post item
     var MatchTable = [[String: Int]]()
     
+    var classUserName = "";
+    var classAuthHeader = [String: String]()
+    
+    
+
     
     
     override func viewDidLoad() {
@@ -24,15 +29,18 @@ class TestMatchTableViewController: UITableViewController {
         let defaults = UserDefaults.standard
         let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)!
         
+        
         let userNameString = defaults.string(forKey: defaultsKeys.keyOne)!
+        classUserName = defaults.string(forKey: defaultsKeys.keyOne)!
         
         let auth_header = ["Authorization" : "Token " + tokenString]
+        classAuthHeader = auth_header
         
         print("THAT GOOD KUSH: THE AUTH HEADER")
         print(auth_header)
         
         
-        generateMatch(userNameString: userNameString, auth_header: auth_header)
+//        generateMatch(userNameString: userNameString, auth_header: auth_header)
         
         getMatches(userNameString: userNameString, auth_header: auth_header)
         
@@ -105,10 +113,30 @@ class TestMatchTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
+    @IBAction func giveNewMatchButton(_ sender: Any) {
+        
+        generateMatch(userNameString: classUserName, auth_header: classAuthHeader)
+    }
+    
     
     func generateMatch(userNameString: String, auth_header: Dictionary<String, String>) {
         
         // SHADY POST //
+        
+        func displayMyAlertMessage(userMessage:String, title:String)
+        {
+            
+            let myAlert = UIAlertController(title: title, message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { action in
+                self.dismiss(animated: true, completion: nil)
+            }
+            
+            myAlert.addAction(okAction);
+            self.present(myAlert, animated: true, completion: nil);
+            
+        }
+        
         // =============================================================//
         
         print("POSTING NOW")
@@ -116,15 +144,59 @@ class TestMatchTableViewController: UITableViewController {
         let todosEndpoint: String = "https://wordup-163921.appspot.com/matches/"
         
         let newTodo: [String: Any] = ["i_username": userNameString ]
-        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo,encoding: JSONEncoding.default, headers: auth_header)
+        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo,encoding: JSONEncoding.default, headers: auth_header).validate()
             .responseJSON { response in
+                
+                switch response.result {
+                case .success:
+                    print("Validation Successful")
+                    print(response.result.value as! NSDictionary)
+                    let random_Match = response.result.value as! NSDictionary
+                    print(random_Match["username"] as! String)
+                    let successMsg = "You matched with " + (random_Match["username"] as! String)
+                    displayMyAlertMessage(userMessage: successMsg, title: "Congrats!")
+                    
+                    self.TableData.append(random_Match as! [String : AnyObject])
+                    self.tableView.reloadData()
+                    
+                case .failure(let error):
+                    print(error)
+                    print("ERROR HERE:")
+                    print("AINT NO BODY WANNA MATCH WITH YOU")
+                    displayMyAlertMessage(userMessage: "There are no more people available to match with!", title: "Whoops!")
+                }
+                 // check if nil --------------- //
+                
+//                if let httpError = response.error {
+//                    print("ERROR HERE:")
+//                    let statusCode = httpError._code
+//                    print(statusCode)
+//                    print("AINT NO BODY WANNA MATCH WITH YOU")
+//                    displayMyAlertMessage(userMessage: "There are no more people available to match with!")
+//                    return
+//                    
+//                } else {
+//                    print(response.result.value as! NSDictionary)
+//                    let random_Match = response.result.value as! NSDictionary
+//                    print(random_Match["username"] as! String)
+//                    let successMsg = "You matched with " + (random_Match["username"] as! String)
+//                    displayMyAlertMessage(userMessage: successMsg)
+//                    
+//                    self.TableData.append(random_Match as! [String : AnyObject])
+//                    self.tableView.reloadData()
+//                }
+
+                
+                
                 //debugPrint(response)
                 //print(response.request)  // original URL request
-                //print(response.response) // HTTP URL response
+                print(response.response) // HTTP URL response
                 //print("THIS IS THE DATA")
                 print(response.data!)     // server data
                 print("THE POST RESPONSE JSON?")
-                print(response.result.value as! NSDictionary)
+                print(response.result.value)
+                
+
         }
         
         
@@ -133,10 +205,11 @@ class TestMatchTableViewController: UITableViewController {
     func getMatches(userNameString: String, auth_header: Dictionary<String, String>) {
         
         let userNameEndpoint: String = "https://wordup-163921.appspot.com/matches/"
-        Alamofire.request(userNameEndpoint, headers: auth_header)
+        Alamofire.request(userNameEndpoint, headers: auth_header).validate()
             .responseJSON { response in
                 // print response as string for debugging, testing, etc.
                 print(response.result.value as! NSArray)
+               // print(response.result.value as! NSDictionary)
                 print(response.result.error)
                 print(response.request)  // original URL request
                 print(response.response) // HTTP URL response
