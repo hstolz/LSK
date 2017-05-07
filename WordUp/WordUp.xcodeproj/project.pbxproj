@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2B2A471DC139700874BA2467 /* Pods_WordUpTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFED851B696B4565E4214ECA /* Pods_WordUpTests.framework */; };
 		2BFCCB472FDA807BE837AE84 /* Pods_WordUp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EA5C3B1D139D6AD287E9E80 /* Pods_WordUp.framework */; };
+		852380421EBEE831003CB58E /* UserProfilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852380411EBEE831003CB58E /* UserProfilesViewController.swift */; };
+		852380441EBEE992003CB58E /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852380431EBEE992003CB58E /* SearchTableViewController.swift */; };
 		856F41281EB5605600AA5869 /* TestMatchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856F41271EB5605600AA5869 /* TestMatchTableViewController.swift */; };
 		856FC0DA1EB5235900E621C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856FC0D91EB5235900E621C6 /* AppDelegate.swift */; };
 		856FC0DC1EB5235900E621C6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856FC0DB1EB5235900E621C6 /* ViewController.swift */; };
@@ -21,6 +23,7 @@
 		85B0C3631EB534DA005B4515 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B0C3621EB534DA005B4515 /* RegistrationViewController.swift */; };
 		85B0C3651EB539E7005B4515 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B0C3641EB539E7005B4515 /* LoginViewController.swift */; };
 		85B0C3671EB53A11005B4515 /* MatchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B0C3661EB53A11005B4515 /* MatchTableViewController.swift */; };
+		85CEBD9D1EBEA7440081B7F3 /* MyMatchesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CEBD9C1EBEA7440081B7F3 /* MyMatchesTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +39,8 @@
 /* Begin PBXFileReference section */
 		1EA5C3B1D139D6AD287E9E80 /* Pods_WordUp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WordUp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DF0BB42949353FC5BA6D531 /* Pods-WordUpTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordUpTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WordUpTests/Pods-WordUpTests.debug.xcconfig"; sourceTree = "<group>"; };
+		852380411EBEE831003CB58E /* UserProfilesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfilesViewController.swift; sourceTree = "<group>"; };
+		852380431EBEE992003CB58E /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
 		856F41271EB5605600AA5869 /* TestMatchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestMatchTableViewController.swift; sourceTree = "<group>"; };
 		856FC0D61EB5235900E621C6 /* WordUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WordUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		856FC0D91EB5235900E621C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -52,6 +57,7 @@
 		85B0C3621EB534DA005B4515 /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		85B0C3641EB539E7005B4515 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		85B0C3661EB53A11005B4515 /* MatchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchTableViewController.swift; sourceTree = "<group>"; };
+		85CEBD9C1EBEA7440081B7F3 /* MyMatchesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyMatchesTableViewController.swift; sourceTree = "<group>"; };
 		86A5443FDEB96289FCFFC987 /* Pods-WordUpTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordUpTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WordUpTests/Pods-WordUpTests.release.xcconfig"; sourceTree = "<group>"; };
 		B86D86F4BBD535EDCE5C9C28 /* Pods-WordUp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordUp.release.xcconfig"; path = "Pods/Target Support Files/Pods-WordUp/Pods-WordUp.release.xcconfig"; sourceTree = "<group>"; };
 		D8BFEA0DE8634B39168B732B /* Pods-WordUp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordUp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WordUp/Pods-WordUp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -113,6 +119,7 @@
 				856FC0D91EB5235900E621C6 /* AppDelegate.swift */,
 				856FC0DB1EB5235900E621C6 /* ViewController.swift */,
 				856FC0DD1EB5235900E621C6 /* Main.storyboard */,
+				852380431EBEE992003CB58E /* SearchTableViewController.swift */,
 				856FC0E01EB5235900E621C6 /* Assets.xcassets */,
 				856FC0E21EB5235900E621C6 /* LaunchScreen.storyboard */,
 				856FC0E51EB5235900E621C6 /* Info.plist */,
@@ -122,6 +129,8 @@
 				85B0C3661EB53A11005B4515 /* MatchTableViewController.swift */,
 				856F41271EB5605600AA5869 /* TestMatchTableViewController.swift */,
 				8574798D1EB996F000D44150 /* SchedulerViewController.swift */,
+				85CEBD9C1EBEA7440081B7F3 /* MyMatchesTableViewController.swift */,
+				852380411EBEE831003CB58E /* UserProfilesViewController.swift */,
 			);
 			path = WordUp;
 			sourceTree = "<group>";
@@ -349,11 +358,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				856FC0DC1EB5235900E621C6 /* ViewController.swift in Sources */,
+				85CEBD9D1EBEA7440081B7F3 /* MyMatchesTableViewController.swift in Sources */,
 				856F41281EB5605600AA5869 /* TestMatchTableViewController.swift in Sources */,
 				85B0C3671EB53A11005B4515 /* MatchTableViewController.swift in Sources */,
 				85B0C3611EB5325B005B4515 /* ProtoTableViewController.swift in Sources */,
 				85B0C3631EB534DA005B4515 /* RegistrationViewController.swift in Sources */,
+				852380421EBEE831003CB58E /* UserProfilesViewController.swift in Sources */,
 				85B0C3651EB539E7005B4515 /* LoginViewController.swift in Sources */,
+				852380441EBEE992003CB58E /* SearchTableViewController.swift in Sources */,
 				8574798E1EB996F000D44150 /* SchedulerViewController.swift in Sources */,
 				856FC0DA1EB5235900E621C6 /* AppDelegate.swift in Sources */,
 			);

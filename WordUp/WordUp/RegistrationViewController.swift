@@ -90,7 +90,6 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
     }
     
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -188,33 +187,45 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
         let todosEndpoint: String = "https://wordup-163921.appspot.com/register/"
         let newTodo: [String: Any] = ["last_name": userLastName, "known_lang": userKnownLang, "first_name": userFirstName, "learn_lang": userLearnLang, "username": userNameText, "password" : userPassword , "email": userEmail ]
         
-        print("THAT EMAILLLLLL: " + userEmail!)
         
-        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo, encoding: JSONEncoding.default).responseJSON { (responseObject) -> Void in
+        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo, encoding: JSONEncoding.default).validate().responseJSON { (responseObject) -> Void in
             
-            debugPrint(responseObject)
-            print(responseObject.result.value)
-            //print(response.result.error)
-            //print(response.request)  // original URL request
-            print(responseObject.response) // HTTP URL response
-            
-            
-            
-            if let responseStatus = responseObject.response?.statusCode {
+            switch responseObject.result {
+            case .success:
+                print("Successful")
                 
-                if responseStatus == 400 {
-                    print("hey whats up hello")
-                    //                    let message = "Username already exists"
-                    //                    self.displayMyAlertMessage(userMessage: message)
-                    //handle same email error, same user error
-                }
-                    
-                    
-                else {
-                    // view all cookies
-                    print(HTTPCookieStorage.shared.cookies!)
-                }
+                
+                
+                
+                
+            case .failure(let error):
+                print(error)
+                print("HEY WHATS UP HELLO, SOMETHING IS WRONG")
             }
+            
+//            debugPrint(responseObject)
+//            print(responseObject.result.value)
+//            //print(response.result.error)
+//            //print(response.request)  // original URL request
+//            print(responseObject.response) // HTTP URL response
+//            
+//            
+//            
+//            if let responseStatus = responseObject.response?.statusCode {
+//                
+//                if responseStatus == 400 {
+//                    print("hey whats up hello")
+//                    //                    let message = "Username already exists"
+//                    //                    self.displayMyAlertMessage(userMessage: message)
+//                    //handle same email error, same user error
+//                }
+//                    
+//                    
+//                else {
+//                    // view all cookies
+//                    print(HTTPCookieStorage.shared.cookies!)
+//                }
+//            }
         }
         
         //        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo, encoding: JSONEncoding.default)
@@ -281,9 +292,6 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
         
         myAlert.addAction(okAction);
         self.present(myAlert, animated:true, completion: nil);
-        
-        
-        
         
     }
     /*
