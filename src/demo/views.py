@@ -158,11 +158,6 @@ class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
 				except:
 					return Response(data='time formatted incorrectly', status=status.HTTP_400_BAD_REQUEST)
 		
-		if new_status in (self.OFFER_1, self.OFFER_2) and None in times:
-			return Response(data='fewer than three times provided', status=status.HTTP_400_BAD_REQUEST)
-		if (new_status == self.CREATED and ((times[0] == None) or 
-				(times[0] not in (match.time_1, match.time_2, match.time_3)))):
-			return Response(data='none or inconsistent time provided', status=status.HTTP_400_BAD_REQUEST)
 		if new_status == old_status:
 			return Response(data='same status provided; no change', status=status.HTTP_400_BAD_REQUEST)
 		if ((old_status == self.INITIAL and new_status == self.CREATED) or
@@ -171,6 +166,11 @@ class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
 			(new_status == self.OFFER_1 and user == match.user_id2) or
 			(new_status == self.OFFER_2 and user == match.user_id1)):
 			return Response(data='invalid state transition', status=status.HTTP_400_BAD_REQUEST)
+		if new_status in (self.OFFER_1, self.OFFER_2) and None in times:
+			return Response(data='fewer than three times provided', status=status.HTTP_400_BAD_REQUEST)
+		if (new_status == self.CREATED and ((times[0] == None) or 
+				(times[0] not in (match.time_1, match.time_2, match.time_3)))):
+			return Response(data='none or inconsistent time provided', status=status.HTTP_400_BAD_REQUEST)
 
 		if   new_status == self.INITIAL:
 			(sc, t1, t2, t3) = (new_status, None, None, None)
