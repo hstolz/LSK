@@ -11,32 +11,8 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.db.models import Q
+from datetime import datetime
 import json
-
-
-@authentication_classes([])
-@permission_classes([])
-class Register(generics.CreateAPIView):
-	queryset = Profile.objects.all()
-	serializer_class = RegistrationSerializer
-
-	def create(self, request):
-		data = json.loads(request.body)
-		p_password   = data.get('password')
-		p_username   = data.get('username')
-		p_first_name = data.get('first_name')
-		p_last_name  = data.get('last_name')
-		p_email 	 = data.get('email')
-		p_known_lang = data.get('known_lang')
-		p_learn_lang = data.get('learn_lang')
-		
-		try:
-			p = Profile.objects.create_user(password=p_password, username=p_username, first_name=p_first_name, 
-				last_name=p_last_name, email=p_email, known_lang=p_known_lang, learn_lang=p_learn_lang)
-		except (ValidationError, IntegrityError) as e:
-			return Response(data=e.message, status=status.HTTP_400_BAD_REQUEST)
-		else:
-			return Response(status=status.HTTP_201_CREATED)
 
 
 class ProfileList(generics.ListAPIView):
@@ -71,6 +47,7 @@ class MatchList(generics.ListCreateAPIView):
 	serializer_class = ProfileSerializer
 
 	def list(self, request):
+		Match.objects.filter(status_code__in=[1,2,3], time_1__gte=datetime.now()).update(status_code=0, time_1=None)
 		username = request.user.get_username()
 		try:
 			initiator = Profile.objects.get(username=username)
@@ -138,23 +115,25 @@ class MatchList(generics.ListCreateAPIView):
 class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Match.objects.all()
 	serializer_class = MatchSerializer
+	(INITIAL, OFFER_1, OFFER_2, CREATED) = (0, 1, 2, 3)
 
 	def check(self, username, pk):
 		try:
-			user = profile.objects.get(username=username)
+			user = Profile.objects.get(username=username)
 		except:
-			return (None, 'user not found', status.HTTP_400_BAD_REQUEST)
+			return (None, None, 'user not found', status.HTTP_400_BAD_REQUEST)
 		try:
-			match = match.objects.get(pk=pk)
+			match = Match.objects.get(match_id=pk)
 		except:
-			return (None, 'match not found', status.HTTP_404_NOT_FOUND)
-		if match.user_id1 != user.id and match.user_id2 != user.id:
-			return (None, 'not a member of this match', status.HTTP_403_FORBIDDEN)
-		return (match, None, None)
+			return (None, None, 'match not found', status.HTTP_404_NOT_FOUND)
+		if match.user_id1 != user and match.user_id2 != user:
+			return (user, 'not a member of this match', status.HTTP_403_FORBIDDEN)
+		return (user, match, None, None)
 
 	def retrieve(self, request, pk):
+		Match.objects.filter(status_code__in=[1,2,3], time_1__gte=datetime.now()).update(status_code=0, time_1=None)
 		username = request.user.get_username()
-		(match, msg, code) = self.check(username, pk)
+		(user, match, msg, code) = self.check(username, pk)
 		if match is None:
 			return Response(data=msg, status=code)
 		serializer = MatchSerializer(match)
@@ -163,22 +142,60 @@ class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
 	def update(self, request, pk):
 		data = json.loads(request.body)
 		username = data.get('username')
-		time_1 	   = data.get('time_1')
-		time_2 	   = data.get('time_2')
-		time_3 	   = data.get('time_3')
-		new_status = data.get('new_status')
-		(match, msg, code) = self.check(username, pk)
+		new_status = int(data.get('new_status'))
+		times = []
+		for t in [data.get('time_1'), data.get('time_2'), data.get('time_3')]:
+			if t is None:
+				times.append(None)
+			else:
+				try:
+					times.append(datetime.strptime(t, '%Y %m %d %H %M'))
+				except:
+					return Response(data='time formatted incorrectly', status=status.HTTP_400_BAD_REQUEST)
+		(user, match, msg, code) = self.check(username, pk)
+		
 		if match is None:
 			return Response(data=msg, status=code)
+		if new_status is None or new_status not in range(4):
+			return Response(data='new status missing or invalid', status=status.HTTP_400_BAD_REQUEST)
+		if new_status == match.status_code:
+			return Response(data='same status provided; no change', status=status.HTTP_400_BAD_REQUEST)
+		if new_status in (self.OFFER_1, self.OFFER_2) and None in times:
+			return Response(data='fewer than three times provided', status=status.HTTP_400_BAD_REQUEST)
+		if ((match.status_code == self.OFFER_1 and 
+			(new_status == self.CREATED or new_status == self.OFFER_2) and match.user_id1 == user) or 
+			(match.status_code == self.OFFER_2 and 
+			(new_status == self.CREATED or new_status == self.OFFER_1) and match.user_id2 == user)):
+			return Response(data='not your turn to change match status', status=status.HTTP_400_BAD_REQUEST)
+		if (new_status == self.CREATED and ((times[0] == None) or 
+				(times[0] not in (match.time_1, match.time_2, match.time_3)))):
+			return Response(data='none or inconsistent time provided', status=status.HTTP_400_BAD_REQUEST)
+
+		if   new_status == self.INITIAL:
+			(sc, t1, t2, t3) = (new_status, None, None, None)
+		elif new_status == self.CREATED:
+			(sc, t1, t2, t3) = (new_status, times[0], None, None)
 		else:
-			# fill this in pls
-			serializer = MatchSerializer(new_match)
-			return Response(serializer.data, status=status.HTTP_200_OK)
+			(sc, t1, t2, t3) = (new_status, times[0], times[1], times[2])
+		
+		try:
+			match.status_code=sc
+			match.time_1=t1
+			match.time_2=t2
+			match.time_3=t3
+			match.save()
+		except IntegrityError as e:
+			print e.message
+			return Response(data='update failed', status=status.HTTP_400_BAD_REQUEST)
+
+		match.refresh_from_db()
+		serializer = MatchSerializer(match)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 	def destroy(request, pk):
 		data = json.loads(request.body)
 		username = data.get('username')
-		(match, msg, code) = self.check(username, pk)
+		(user, match, msg, code) = self.check(username, pk)
 		if match is None:
 			return Response(data=msg, status=code)
 		try:
@@ -186,6 +203,31 @@ class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
 		except:
 			return Response(data='deletion failed', status=status.HTTP_400_BAD_REQUEST)
 		return Response(status=status.HTTP_200_OK)
+
+
+@authentication_classes([])
+@permission_classes([])
+class Register(generics.CreateAPIView):
+	queryset = Profile.objects.all()
+	serializer_class = RegistrationSerializer
+
+	def create(self, request):
+		data = json.loads(request.body)
+		p_password   = data.get('password')
+		p_username   = data.get('username')
+		p_first_name = data.get('first_name')
+		p_last_name  = data.get('last_name')
+		p_email 	 = data.get('email')
+		p_known_lang = data.get('known_lang')
+		p_learn_lang = data.get('learn_lang')
+		
+		try:
+			p = Profile.objects.create_user(password=p_password, username=p_username, first_name=p_first_name, 
+				last_name=p_last_name, email=p_email, known_lang=p_known_lang, learn_lang=p_learn_lang)
+		except (ValidationError, IntegrityError) as e:
+			return Response(data=e.message, status=status.HTTP_400_BAD_REQUEST)
+		else:
+			return Response(status=status.HTTP_201_CREATED)
 		
 
 @authentication_classes([])
