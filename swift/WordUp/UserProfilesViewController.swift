@@ -15,7 +15,23 @@ class UserProfilesViewController: UIViewController {
     var userId = [String: AnyObject]()
     
     
+    var languageTable: [String:String] = [
+        "English" : "en", "Chinese" : "zh",
+        "Spanish" : "es", "Arabic"  : "ar",
+        "Portuguese" : "pt", "Russian" : "ru",
+        "French" : "fr", "Japanese" : "ja",
+        "Italian" : "it", "Czech" : "cs",
+        "German" : "de", "Hebrew" : "he",
+        "Hindi" : "hi", "Korean" : "ko",
+        "Greek" : "el", "Persian" : "fa",
+        "Swahili" : "sw", "Turkish" : "tr",
+        "Twi" : "tw", "Urdu" : "ur",
+        "Polish" : "pl"]
+    
+    
+    @IBOutlet weak var learn_lang: UILabel!
     @IBOutlet weak var profileUsername: UILabel!
+    @IBOutlet weak var known_lang: UILabel!
     //@IBOutlet weak var profileUsername: UILabel!
     //    @IBOutlet weak var profileUsername: UILabel!
     //    @IBOutlet weak var profileUsername: UILabel!
@@ -39,9 +55,22 @@ class UserProfilesViewController: UIViewController {
         //        print(lastName)
         //        let fullName = self.userId["first_name"] as! String + self.userId["last_name"] as! String
         profileUsername.text = fullName
+        let known_lang_code = self.userId["known_lang"] as! String
+        let learn_lang_code = self.userId["learn_lang"] as! String
         //            self.userId["id"]?.stringValue
         
         
+        for entry in languageTable {
+            if (entry.value == known_lang_code) {
+                known_lang.text = entry.key
+            }
+        }
+        
+        for entry in languageTable {
+            if (entry.value == learn_lang_code) {
+                learn_lang.text = entry.key
+            }
+        }
     
         
         

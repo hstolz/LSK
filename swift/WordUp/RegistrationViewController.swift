@@ -27,6 +27,8 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
     @IBOutlet weak var learnLangTextField: UITextField!
     @IBOutlet weak var knownLangTextField: UITextField!
     
+    @IBOutlet weak var bioTextView: UITextView!
+    
     
     var languageTable: [String:String] = [
         "English" : "en", "Chinese" : "zh",
@@ -93,6 +95,8 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        LoginAPI.doTestPrint()
+        
         ScrollView.contentSize.height = 1200
         
         // NEW STUFF
@@ -141,6 +145,7 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
         let userNameText = userNameTextField.text
         let userFirstName = firstNameTextField.text
         let userLastName = lastNameTextField.text
+        let userBio = bioTextView.text!
         
         
         
@@ -185,105 +190,47 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
         
         
         let todosEndpoint: String = "https://wordup-163921.appspot.com/register/"
-        let newTodo: [String: Any] = ["last_name": userLastName, "known_lang": userKnownLang, "first_name": userFirstName, "learn_lang": userLearnLang, "username": userNameText, "password" : userPassword , "email": userEmail ]
+        let newTodo: [String: Any] = ["last_name": userLastName, "known_lang": userKnownLang, "first_name": userFirstName, "learn_lang": userLearnLang, "username": userNameText, "password" : userPassword , "email": userEmail, "bio": userBio]
         
         
-        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo, encoding: JSONEncoding.default).validate().responseJSON { (responseObject) -> Void in
+        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo, encoding: JSONEncoding.default).validate().responseData { (responseObject) -> Void in
             
             switch responseObject.result {
             case .success:
                 print("Successful")
                 
+                let defaults = UserDefaults.standard
                 
+                defaults.set(userNameText, forKey: defaultsKeys.keyOne)
                 
+                defaults.set(userPassword, forKey: defaultsKeys.keyTwo)
                 
+                let userName = defaults.string(forKey: defaultsKeys.keyOne)
+                print (userName!)
+                let password = defaults.string(forKey: defaultsKeys.keyTwo)
+                print (password!)
+                
+                LoginAPI.doLogin(userNameString: userName!, userPasswordString: password!)
+                LoginAPI.doGetToken(userNameString: userName!, userPasswordString: password!)
+
+                self.performSegue(withIdentifier: "registrationSuccessSegue", sender: self)
                 
             case .failure(let error):
                 print(error)
+                print(responseObject.data)
+                print(responseObject.value)
+                self.displayMyAlertMessage(userMessage: "Error Registering, Please try again. If you are already registered, please login!")
+                
                 print("HEY WHATS UP HELLO, SOMETHING IS WRONG")
             }
             
-//            debugPrint(responseObject)
-//            print(responseObject.result.value)
-//            //print(response.result.error)
-//            //print(response.request)  // original URL request
-//            print(responseObject.response) // HTTP URL response
-//            
-//            
-//            
-//            if let responseStatus = responseObject.response?.statusCode {
-//                
-//                if responseStatus == 400 {
-//                    print("hey whats up hello")
-//                    //                    let message = "Username already exists"
-//                    //                    self.displayMyAlertMessage(userMessage: message)
-//                    //handle same email error, same user error
-//                }
-//                    
-//                    
-//                else {
-//                    // view all cookies
-//                    print(HTTPCookieStorage.shared.cookies!)
-//                }
-//            }
         }
-        
-        //        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo, encoding: JSONEncoding.default)
-        //            .validate()
-        //            .responseJSON (completionHandler: {response in
-        //                if response.error == nil {
-        //                    var statusCode = responseObject.response?.statusCode {
-        //                        if statusCode == 400 {
-        //                            print ("WE MADE IT HERE")
-        //                        }
-        //                        else {
-        //                            print ("WE ARE HERE")
-        //                        }
-        //                    }
-        //                }
-        
-        //                if response.result.isSuccess {
-        //                    print ("SUCCESS")
-        //                }
-        //                else if response.result.isFailure {
-        //                    print ("FAILURE")
-        //                }
-        
-        
-        // display alert with error message
-        
-        
-        
-        //        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo, encoding: JSONEncoding.default)
-        //            .responseJSON { response in
-        ////                if response.error != nil {
-        ////                    print ("WE ARE HERE")
-        ////                }
-        ////                if response.result.isFailure{
-        ////                    let httpStatusCode = response.response?.statusCode {
-        ////                        if httpStatusCode == 400{
-        ////                            message = "Username already exists"
-        ////                            displayMyAlertMessage(userMessage: message)
-        ////                        }
-        ////                    }
-        ////                }
-        //
-        //                //debugPrint(response)
-        //                print(response.result.value)
-        //                //print(response.result.error)
-        //                //print(response.request)  // original URL request
-        //                print(response.response) // HTTP URL response
-        //                //print(response.data)
-        //
-        //        }
-        //
         
         
     }
     
         
     func displayMyAlertMessage(userMessage: String) {
-        
         
         var myAlert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.alert);
         

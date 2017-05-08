@@ -10,6 +10,22 @@ import UIKit
 import Alamofire
 
 class MyProfileViewController: UIViewController {
+    
+    
+    
+    var languageTable: [String:String] = [
+        "English" : "en", "Chinese" : "zh",
+        "Spanish" : "es", "Arabic"  : "ar",
+        "Portuguese" : "pt", "Russian" : "ru",
+        "French" : "fr", "Japanese" : "ja",
+        "Italian" : "it", "Czech" : "cs",
+        "German" : "de", "Hebrew" : "he",
+        "Hindi" : "hi", "Korean" : "ko",
+        "Greek" : "el", "Persian" : "fa",
+        "Swahili" : "sw", "Turkish" : "tr",
+        "Twi" : "tw", "Urdu" : "ur",
+        "Polish" : "pl"]
+
 
     @IBOutlet weak var profileUserName: UILabel!
     @IBOutlet weak var knownLangLabel: UILabel!
@@ -22,6 +38,24 @@ class MyProfileViewController: UIViewController {
         
         let defaults = UserDefaults.standard
         let userName = defaults.string(forKey: defaultsKeys.keyOne)
+        
+        let userId = defaults.string(forKey: defaultsKeys.keyThree)
+        let known_lang_code = defaults.string(forKey: defaultsKeys.keyFour)
+        let learn_lang_code = defaults.string(forKey: defaultsKeys.keyFive)
+        
+        for entry in languageTable {
+            if (entry.value == known_lang_code!) {
+                knownLangLabel.text = entry.key
+            }
+        }
+        
+        for entry in languageTable {
+            if (entry.value == learn_lang_code!) {
+                learnLangLabel.text = entry.key
+            }
+        }
+
+        
         profileUserName.text = userName
         profileUserDescription.becomeFirstResponder()
         
@@ -96,6 +130,9 @@ class MyProfileViewController: UIViewController {
         
         defaults.removeObject(forKey: defaultsKeys.keyOne)
         defaults.removeObject(forKey: defaultsKeys.tokenKey)
+        defaults.removeObject(forKey: defaultsKeys.keyThree)
+        defaults.removeObject(forKey: defaultsKeys.keyFour)
+        defaults.removeObject(forKey: defaultsKeys.keyFive)
         defaults.synchronize()
         
         let userName = defaults.string(forKey: defaultsKeys.keyOne)

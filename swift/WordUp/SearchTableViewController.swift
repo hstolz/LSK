@@ -16,6 +16,9 @@ class SearchTableViewController: UITableViewController {
     var TableData = [[String: AnyObject]]()
     //    var userId: String = "-1"
     
+    var classUserName = "";
+    var classAuthHeader = [String: String]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = false
@@ -23,6 +26,13 @@ class SearchTableViewController: UITableViewController {
         let defaults = UserDefaults.standard
         let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)!
         let auth_header = ["Authorization" : "Token " + tokenString]
+        
+        
+        let userNameString = defaults.string(forKey: defaultsKeys.keyOne)!
+        
+        classUserName = defaults.string(forKey: defaultsKeys.keyOne)!
+        classAuthHeader = auth_header
+
         
         print("THAT GOOD KUSH: THE AUTH HEADER")
         print(auth_header)
@@ -56,6 +66,61 @@ class SearchTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
+    func displayMyAlertMessage(userMessage:String, title:String)
+    {
+        
+        let myAlert = UIAlertController(title: title, message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { action in
+            // self.dismiss(animated: true, completion: nil)
+        }
+        
+        myAlert.addAction(okAction);
+        self.present(myAlert, animated: true, completion: nil);
+        
+    }
+    
+    @IBAction func randomMatchButtonPressed(_ sender: Any) {
+        
+        let todosEndpoint: String = "https://wordup-163921.appspot.com/matches/"
+        
+        let newTodo: [String: Any] = ["i_username": classUserName]
+        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo,encoding: JSONEncoding.default, headers: classAuthHeader).validate()
+            .responseJSON { response in
+                
+                switch response.result {
+                case .success:
+                    print("Validation Successful")
+                    print(response.result.value as! NSDictionary)
+                    let random_Match = response.result.value as! NSDictionary
+                    print(random_Match["username"] as! String)
+                    let successMsg = "You matched with " + (random_Match["username"] as! String)
+                    self.displayMyAlertMessage(userMessage: successMsg, title: "Congrats!")
+                    
+//                    self.TableData.append(random_Match as! [String : AnyObject])
+//                    self.tableView.reloadData()
+                    
+                    // SEGUE TO THAT PERSON ? 
+                    
+                case .failure(let error):
+                    print(error)
+                    print("ERROR HERE:")
+                    print("AINT NO BODY WANNA MATCH WITH YOU")
+                    self.displayMyAlertMessage(userMessage: "There are no more people available to match with!", title: "Whoops!")
+                }
+                
+                //                print(response.response) // HTTP URL response
+                //                //print("THIS IS THE DATA")
+                //                print(response.data!)     // server data
+                //                print("THE POST RESPONSE JSON?")
+                //                print(response.result.value)
+                
+                
+        }
+        
+        
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

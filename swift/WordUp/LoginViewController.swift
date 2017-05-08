@@ -15,6 +15,10 @@ struct defaultsKeys {
     static let keyOne = "username"
     static let keyTwo = "password"
     static let tokenKey = "token"
+    static let keyThree = "userId"
+    static let keyFour = "known_lang"
+    static let keyFive = "learn_lang"
+    
     
 }
 
@@ -44,6 +48,20 @@ class LoginViewController: UIViewController {
         //        print(defaultsKeys.keyOne)
         //        print(defaultsKeys.keyTwo)
         
+        func displayMyAlertMessage(userMessage:String, title:String)
+        {
+            
+            let myAlert = UIAlertController(title: title, message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { action in
+                self.dismiss(animated: true, completion: nil)
+            }
+            
+            myAlert.addAction(okAction);
+            self.present(myAlert, animated: true, completion: nil);
+            
+        }
+        
         // ------------- POST --------------------------- //
         
         let todosEndpoint: String = "https://wordup-163921.appspot.com/login/"
@@ -63,6 +81,46 @@ class LoginViewController: UIViewController {
                     let my_Profile = response.result.value as! NSDictionary
                     print(my_Profile["username"] as! String)
                     print(response.result)
+                    
+                    defaults.set(my_Profile["id"], forKey: defaultsKeys.keyThree)
+                    defaults.set(my_Profile["known_lang"], forKey: defaultsKeys.keyFour)
+                    defaults.set(my_Profile["learn_lang"], forKey: defaultsKeys.keyFive)
+                    
+                    // HIT TOKEN
+                    let tokenEndpoint: String = "https://wordup-163921.appspot.com/token/"
+                    let tokenParameters: [String: Any] = ["username": self.loginUserNameTextField.text!, "password": self.loginPasswordTextField.text!]
+                    
+                    var tokenDict = [String:String]()
+                    Alamofire.request(tokenEndpoint, method: .post, parameters: tokenParameters, encoding: JSONEncoding.default)
+                        .responseJSON { response in // was .responseJSON
+                            if let httpError = response.error {
+                                print("ERROR HERE:")
+                                let statusCode = httpError._code
+                                print(statusCode)
+                            } else {
+                                
+                                print("DEM DEBUG STATEMENTS DOE")
+                                debugPrint(response)
+                                
+                                print("TOKEN AS NSDICT:")
+                                
+                                print(response.value as! NSDictionary)
+                                tokenDict = (response.value as! NSDictionary) as! [String : String]
+                                print(tokenDict)
+                                
+                                defaults.set(tokenDict["token"], forKey: defaultsKeys.tokenKey)
+                                
+                                let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)
+                                print("WE ARE PRINTING THE SHIT NOW")
+                                print(tokenString)
+                                
+                                
+                                self.performSegue(withIdentifier: "loginSegue", sender: self)
+                                
+                                
+                            }
+                            
+                    }
 
                     
                 case .failure(let error):
@@ -76,43 +134,43 @@ class LoginViewController: UIViewController {
          print("END POST --------------------------- ------//")
         
         // HIT TOKEN
-        let tokenEndpoint: String = "https://wordup-163921.appspot.com/token/"
-        let tokenParameters: [String: Any] = ["username": loginUserNameTextField.text, "password": loginPasswordTextField.text]
-        
-        var tokenDict = [String:String]()
-        Alamofire.request(tokenEndpoint, method: .post, parameters: tokenParameters, encoding: JSONEncoding.default)
-            .responseJSON { response in // was .responseJSON
-                if let httpError = response.error {
-                    print("ERROR HERE:")
-                    let statusCode = httpError._code
-                    print(statusCode)
-                } else {
-                    
-                    print("DEM DEBUG STATEMENTS DOE")
-                    debugPrint(response)
-                    
-                    print("TOKEN AS NSDICT:")
-                    
-                    print(response.value as! NSDictionary)
-                    tokenDict = (response.value as! NSDictionary) as! [String : String]
-                    print(tokenDict)
-                    
-                    defaults.set(tokenDict["token"], forKey: defaultsKeys.tokenKey)
-                    
-                    let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)
-                    print("WE ARE PRINTING THE SHIT NOW")
-                    print(tokenString)
-                    
-                    
-                    self.performSegue(withIdentifier: "loginSegue", sender: self)
-                    
-                    
-                }
-                
-        }
+//        let tokenEndpoint: String = "https://wordup-163921.appspot.com/token/"
+//        let tokenParameters: [String: Any] = ["username": loginUserNameTextField.text, "password": loginPasswordTextField.text]
+//        
+//        var tokenDict = [String:String]()
+//        Alamofire.request(tokenEndpoint, method: .post, parameters: tokenParameters, encoding: JSONEncoding.default)
+//            .responseJSON { response in // was .responseJSON
+//                if let httpError = response.error {
+//                    print("ERROR HERE:")
+//                    let statusCode = httpError._code
+//                    print(statusCode)
+//                } else {
+//                    
+//                    print("DEM DEBUG STATEMENTS DOE")
+//                    debugPrint(response)
+//                    
+//                    print("TOKEN AS NSDICT:")
+//                    
+//                    print(response.value as! NSDictionary)
+//                    tokenDict = (response.value as! NSDictionary) as! [String : String]
+//                    print(tokenDict)
+//                    
+//                    defaults.set(tokenDict["token"], forKey: defaultsKeys.tokenKey)
+//                    
+//                    let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)
+//                    print("WE ARE PRINTING THE SHIT NOW")
+//                    print(tokenString)
+//                    
+//                    
+//                    self.performSegue(withIdentifier: "loginSegue", sender: self)
+//                    
+//                    
+//                }
+//                
+//        }
         // END HIT TOKEN
-        print("HERE IS THE ONE OUTSIDE THE FCT!!")
-        print(tokenDict)
+//        print("HERE IS THE ONE OUTSIDE THE FCT!!")
+//        print(tokenDict)
   //      print("THE TOKEN IS" + tokenDict["token"]!)
         
   //      let Auth_header = ["Authorization" : "Token " + tokenDict["token"]! ]
