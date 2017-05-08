@@ -11,10 +11,27 @@ import Alamofire
 
 class UserProfilesViewController: UIViewController {
     
+    var languageTable: [String:String] = [
+        "English" : "en", "Chinese" : "zh",
+        "Spanish" : "es", "Arabic"  : "ar",
+        "Portuguese" : "pt", "Russian" : "ru",
+        "French" : "fr", "Japanese" : "ja",
+        "Italian" : "it", "Czech" : "cs",
+        "German" : "de", "Hebrew" : "he",
+        "Hindi" : "hi", "Korean" : "ko",
+        "Greek" : "el", "Persian" : "fa",
+        "Swahili" : "sw", "Turkish" : "tr",
+        "Twi" : "tw", "Urdu" : "ur",
+        "Polish" : "pl"]
+    
     var userData = [String: AnyObject]()
     var userId = [String: AnyObject]()
+//    var userKnownLang = [String: AnyObject]()
+//    var userKnownLang = [String: AnyObject]()
     
     
+    @IBOutlet weak var known_lang: UILabel!
+    @IBOutlet weak var learn_lang: UILabel!
     @IBOutlet weak var profileUsername: UILabel!
     //@IBOutlet weak var profileUsername: UILabel!
     //    @IBOutlet weak var profileUsername: UILabel!
@@ -28,20 +45,42 @@ class UserProfilesViewController: UIViewController {
         let defaults = UserDefaults.standard
         let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)!
         let auth_header = ["Authorization" : "Token " + tokenString]
-        //        profileUsername.text = self.userId
         print("PRINT THE FOLLOWING")
-        //        print(self.userId["username"]!)
-        //        newDetail.setQuantity(quantity: "\(quantity)")
+ 
         let firstName = self.userId["first_name"] as! String
         let lastName = self.userId["last_name"] as! String
         let fullName = firstName + " " + lastName
-        //        print(firstName)
-        //        print(lastName)
-        //        let fullName = self.userId["first_name"] as! String + self.userId["last_name"] as! String
         profileUsername.text = fullName
+        let known_lang_code = self.userId["known_lang"] as! String
+        let learn_lang_code = self.userId["learn_lang"] as! String
         //            self.userId["id"]?.stringValue
+//        print("THIS IS THE PART THAT NEEDS TO CHANGE")
+//        print("THIS IS THE PART THAT NEEDS TO CHANGE")
+//        print("THIS IS THE PART THAT NEEDS TO CHANGE")
+//        print (self.userId)
+//        print (known_lang_code)
+//        print (learn_lang_code)
+//        print("THIS IS THE PART THAT NEEDS TO CHANGE")
+//        print("THIS IS THE PART THAT NEEDS TO CHANGE")
+//        print("THIS IS THE PART THAT NEEDS TO CHANGE")
+
+        for entry in languageTable {
+            if (entry.value == known_lang_code) {
+                known_lang.text = entry.key
+            }
+        }
         
+        for entry in languageTable {
+            if (entry.value == learn_lang_code) {
+                learn_lang.text = entry.key
+            }
+        }
         
+//        let mapping = languageTable.first(where: { (key, _) in key.contains(known_lang_code! as! String) })
+//        known_lang.text = mapping?.key
+//        
+//        let mapping2 = languageTable.first(where: { (key, _) in key.contains(learn_lang_code! as! String) })
+//        learn_lang.text = mapping2?.key
     
         
         

@@ -208,6 +208,7 @@ class MyMatchesTableViewController: UITableViewController {
             //            print (self.TableData[2]["id"]!)
             
             svc.userId = self.TableData[indexPath!.row]
+            
             print (svc.userId)
             
             

@@ -15,6 +15,10 @@ struct defaultsKeys {
     static let keyOne = "username"
     static let keyTwo = "password"
     static let tokenKey = "token"
+    static let keyThree = "userId"
+    static let keyFour = "known_lang"
+    static let keyFive = "learn_lang"
+    
     
 }
 
@@ -63,6 +67,11 @@ class LoginViewController: UIViewController {
                     let my_Profile = response.result.value as! NSDictionary
                     print(my_Profile["username"] as! String)
                     print(response.result)
+                    
+                    defaults.set(my_Profile["id"], forKey: defaultsKeys.keyThree)
+                    defaults.set(my_Profile["known_lang"], forKey: defaultsKeys.keyFour)
+                    defaults.set(my_Profile["learn_lang"], forKey: defaultsKeys.keyFive)
+                    
 
                     
                 case .failure(let error):
