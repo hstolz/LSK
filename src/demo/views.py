@@ -206,6 +206,37 @@ class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
 		return Response(status=status.HTTP_200_OK)
 
 
+class TimeDetail(generics.RetrieveAPIView):
+	queryset = Match.objects.all()
+	serializer_class = MatchSerializer
+	(INITIAL, OFFER_1, OFFER_2, CREATED) = (0, 1, 2, 3)
+
+	def check(self, username, pk):
+		try:
+			user = Profile.objects.get(username=username)
+		except:
+			return (None, None, None, 'user not found', status.HTTP_400_BAD_REQUEST)
+		try:
+			partner = Profile.objects.get(id=pk)
+		except:
+			return (None, None, None, 'partner not found', status.HTTP_400_NOT_FOUND)
+		(c1, c2, c3, c4) = (Q(user_id1=user), Q(user_id2=user), Q(user_id1=partner), Q(user_id2=partner))
+		match = Match.objects.filter((c1 | c2) & (c3 | c4))
+		if len(match) == 0:
+			return (None, None, None, 'match does not exist', status.HTTP_404_NOT_FOUND)
+		return (user, partner, match[0], None, None)
+
+	def retrieve(self, request, id):
+		t = datetime.now() - timedelta(hours=6) # fuck you google
+		Match.objects.filter(time_1__lte=t).update(status_code=0, time_1=None, time_2=None, time_3=None)
+		username = request.user.get_username()
+		(user, partner, match, msg, code) = self.check(username, pk)
+		if match is None:
+			return Response(data=msg, status=code)
+		serializer = MatchSerializer(match)
+		return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
 @authentication_classes([])
 @permission_classes([])
 class Register(generics.CreateAPIView):
@@ -245,7 +276,8 @@ class Login(generics.CreateAPIView):
 		user = authenticate(username=username, password=password)
 		if user is not None:
 			login(request, user)
-			return Response(status=status.HTTP_200_OK)
+			serializer = ProfileSerializer(user)
+			return Response(data=serializer.data, status=status.HTTP_200_OK)
 		else:
 			return Response(data='login failed', status=status.HTTP_401_UNAUTHORIZED)
 
