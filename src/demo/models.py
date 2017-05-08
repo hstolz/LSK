@@ -24,6 +24,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 class Profile(AbstractUser):
 	known_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
 	learn_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
+	# need to add bio
 
 	class Meta:
 		db_table = 'profiles'

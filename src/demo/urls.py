@@ -11,9 +11,9 @@ urlpatterns = [
     url(r'^matches/$', views.MatchList.as_view()),
     url(r'^matches/(?P<pk>[0-9]+)/$', views.MatchDetail.as_view()),
     url(r'^times/(?P<id>[0-9]+)/$', views.TimeDetail.as_view()),
-	url(r'^register/$', views.Register.as_view()),
+    url(r'^register/$', views.Register.as_view()),
     url(r'^token/', authtoken_views.obtain_auth_token),
-	url(r'^login/$', views.Login.as_view()),
+    url(r'^login/$', views.Login.as_view()),
     url(r'^logout/$', views.Logout.as_view()),
     url(r'^admin/', admin.site.urls),
 ]
