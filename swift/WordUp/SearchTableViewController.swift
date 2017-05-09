@@ -14,6 +14,8 @@ class SearchTableViewController: UITableViewController {
     var listData = [[String: AnyObject]]()
     var names = [String]()
     var TableData = [[String: AnyObject]]()
+    var newMatchName = ""
+    
     //    var userId: String = "-1"
     
     var classUserName = "";
@@ -96,6 +98,12 @@ class SearchTableViewController: UITableViewController {
                     print(random_Match["username"] as! String)
                     let successMsg = "You matched with " + (random_Match["username"] as! String)
                     self.displayMyAlertMessage(userMessage: successMsg, title: "Congrats!")
+                    self.newMatchName = random_Match["username"] as! String
+                    
+                    //self.performSegue(withIdentifier: "newMatchSegue", sender: self)
+                    self.tabBarController?.selectedIndex = 1
+
+                    
                     
 //                    self.TableData.append(random_Match as! [String : AnyObject])
 //                    self.tableView.reloadData()
@@ -146,7 +154,9 @@ class SearchTableViewController: UITableViewController {
         let item = self.TableData[indexPath.row]
         
         //        cell.textLabel?.text = self.TableData[indexPath.row]
-        cell.textLabel?.text = item["last_name"] as? String
+        var fname = item["first_name"] as! String
+        var lname = item["last_name"] as! String
+        cell.textLabel?.text = fname + " " + lname
         //        print(self.listData.count)
         
         return cell
@@ -189,6 +199,7 @@ class SearchTableViewController: UITableViewController {
             //            print (self.TableData[2]["id"]!)
             
             svc.userId = self.TableData[indexPath!.row]
+            svc.matchAvailability = 1
             print (svc.userId)
             
             
@@ -236,6 +247,41 @@ class SearchTableViewController: UITableViewController {
         //        self.present(destination, animated:true, completion:nil)
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print ("YO THIS IS BEING CALLED")
+//        var removeIndex = -1
+//        for i in 0 ..< self.TableData.count
+//        {
+//            var nextProfile = self.TableData[i]
+//            if nextProfile["username"] as! String == self.newMatchName {
+//                removeIndex = i
+//            }
+//        }
+//        
+//        self.TableData.remove(at: removeIndex)
+//        
+//        //self.TableData.append(random_Match as! [String : AnyObject])
+//        
+//        tableView.reloadData()
+        let defaults = UserDefaults.standard
+        let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)!
+        let auth_header = ["Authorization" : "Token " + tokenString]
+        
+        let todoEndpoint: String = "https://wordup-163921.appspot.com/profiles/"
+        Alamofire.request(todoEndpoint, headers: auth_header)
+            .responseJSON { response in
+                // print response as string for debugging, testing, etc.
+                print(response.result.value as! NSArray)
+                print(response.result.error)
+                
+                self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]
+                print (self.TableData)
+                self.tableView.reloadData()
+
+        }
+    }
     
     /*
      // Override to support conditional editing of the table view.

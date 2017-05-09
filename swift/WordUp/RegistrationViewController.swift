@@ -210,10 +210,80 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
                 let password = defaults.string(forKey: defaultsKeys.keyTwo)
                 print (password!)
                 
-                LoginAPI.doLogin(userNameString: userName!, userPasswordString: password!)
-                LoginAPI.doGetToken(userNameString: userName!, userPasswordString: password!)
+//                LoginAPI.doLogin(userNameString: userName!, userPasswordString: password!)
+//                LoginAPI.doGetToken(userNameString: userName!, userPasswordString: password!)
+                let loginEndpoint: String = "https://wordup-163921.appspot.com/login/"
+                let loginParam: [String: Any] = ["username": userName!, "password": password!]
+                
+                Alamofire.request(loginEndpoint, method: .post, parameters: loginParam, encoding: JSONEncoding.default).validate()
+                    .responseJSON { response in // was .responseJSON
+                        
+                        switch response.result {
+                        case .success:
+                            
+                            print(response.result.value as! NSDictionary)
+                            let my_Profile = response.result.value as! NSDictionary
+                            print(my_Profile["username"] as! String)
+                            print(response.result)
+                            
+                            defaults.set(my_Profile["id"], forKey: defaultsKeys.keyThree)
+                            defaults.set(my_Profile["known_lang"], forKey: defaultsKeys.keyFour)
+                            defaults.set(my_Profile["learn_lang"], forKey: defaultsKeys.keyFive)
+                            defaults.set(my_Profile["bio"], forKey: defaultsKeys.keySix)
+                            
+                            print("FMLLllllllLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+                            print("FMLLllllllLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+                            print("FMLLllllllLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+                            print("FMLLllllllLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+                            print("FMLLllllllLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+                            print(defaults.string(forKey: defaultsKeys.keyFour)!)
+                            
 
-                self.performSegue(withIdentifier: "registrationSuccessSegue", sender: self)
+                            
+                            // HIT TOKEN
+                            let tokenEndpoint: String = "https://wordup-163921.appspot.com/token/"
+                            let tokenParameters: [String: Any] = ["username": userName!, "password": password!]
+                            
+                            var tokenDict = [String:String]()
+                            Alamofire.request(tokenEndpoint, method: .post, parameters: tokenParameters, encoding: JSONEncoding.default)
+                                .responseJSON { response in // was .responseJSON
+                                    if let httpError = response.error {
+                                        print("ERROR HERE:")
+                                        let statusCode = httpError._code
+                                        print(statusCode)
+                                    } else {
+                                        
+                                        print("DEM DEBUG STATEMENTS DOE")
+                                        debugPrint(response)
+                                        
+                                        print("TOKEN AS NSDICT:")
+                                        
+                                        print(response.value as! NSDictionary)
+                                        tokenDict = (response.value as! NSDictionary) as! [String : String]
+                                        print(tokenDict)
+                                        
+                                        defaults.set(tokenDict["token"], forKey: defaultsKeys.tokenKey)
+                                        
+                                        let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)
+                                        print("WE ARE PRINTING THE SHIT NOW")
+                                        print(tokenString)
+                                        
+                                        self.performSegue(withIdentifier: "registrationSuccessSegue", sender: self)
+                                        
+                                        
+                                    }
+                                    
+                            }
+                            
+                            
+                        case .failure(let error):
+                            print(error)
+                            
+                            
+                        }
+                }
+
+//                self.performSegue(withIdentifier: "registrationSuccessSegue", sender: self)
                 
             case .failure(let error):
                 print(error)

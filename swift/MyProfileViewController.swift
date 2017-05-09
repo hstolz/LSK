@@ -30,7 +30,9 @@ class MyProfileViewController: UIViewController {
     @IBOutlet weak var profileUserName: UILabel!
     @IBOutlet weak var knownLangLabel: UILabel!
     @IBOutlet weak var learnLangLabel: UILabel!
-    @IBOutlet weak var profileUserDescription: UITextView!
+    //@IBOutlet weak var profileUserDescription: UITextView!
+    @IBOutlet weak var profileUserDescriptionLabel: UILabel!
+    
 
     
     override func viewDidLoad() {
@@ -42,6 +44,10 @@ class MyProfileViewController: UIViewController {
         let userId = defaults.string(forKey: defaultsKeys.keyThree)
         let known_lang_code = defaults.string(forKey: defaultsKeys.keyFour)
         let learn_lang_code = defaults.string(forKey: defaultsKeys.keyFive)
+        
+        let bio_preset = defaults.string(forKey: defaultsKeys.keySix)
+       // profileUserDescription.text = bio_preset
+        profileUserDescriptionLabel.text = bio_preset
         
         for entry in languageTable {
             if (entry.value == known_lang_code!) {
@@ -57,7 +63,7 @@ class MyProfileViewController: UIViewController {
 
         
         profileUserName.text = userName
-        profileUserDescription.becomeFirstResponder()
+        //profileUserDescription.becomeFirstResponder()
         
 //        let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)!
 //        
@@ -129,10 +135,13 @@ class MyProfileViewController: UIViewController {
         // CLEAR GLOBAL VARS
         
         defaults.removeObject(forKey: defaultsKeys.keyOne)
+        defaults.removeObject(forKey: defaultsKeys.keyTwo)
         defaults.removeObject(forKey: defaultsKeys.tokenKey)
         defaults.removeObject(forKey: defaultsKeys.keyThree)
         defaults.removeObject(forKey: defaultsKeys.keyFour)
         defaults.removeObject(forKey: defaultsKeys.keyFive)
+        defaults.removeObject(forKey: defaultsKeys.keySix)
+        //defaults.removeObject(forKey: defaultsKeys.keySeven)
         defaults.synchronize()
         
         let userName = defaults.string(forKey: defaultsKeys.keyOne)

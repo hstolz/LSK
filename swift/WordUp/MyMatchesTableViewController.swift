@@ -56,7 +56,7 @@ class MyMatchesTableViewController: UITableViewController {
         let myAlert = UIAlertController(title: title, message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
         
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { action in
-            self.dismiss(animated: true, completion: nil)
+            //self.dismiss(animated: true, completion: nil)
         }
         
         myAlert.addAction(okAction);
@@ -174,7 +174,7 @@ class MyMatchesTableViewController: UITableViewController {
         var first_name = (item["first_name"]) as! String
         var last_name = item["last_name"] as! String
         print (first_name + last_name)
-        cell.textLabel?.text = "You matched with " + first_name + " " + last_name
+        cell.textLabel?.text = first_name + " " + last_name
         
         return cell
     }
@@ -208,6 +208,7 @@ class MyMatchesTableViewController: UITableViewController {
             //            print (self.TableData[2]["id"]!)
             
             svc.userId = self.TableData[indexPath!.row]
+            svc.matchAvailability = 0 
             print (svc.userId)
             
             
@@ -253,6 +254,19 @@ class MyMatchesTableViewController: UITableViewController {
         //        let destination = storyboard.instantiateViewController(withIdentifier: <#T##String#>)
         //        navigationController?.pushViewController(destination, animated: true)
         //        self.present(destination, animated:true, completion:nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let defaults = UserDefaults.standard
+        let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)!
+        let userNameString = defaults.string(forKey: defaultsKeys.keyOne)!
+        let auth_header = ["Authorization" : "Token " + tokenString]
+        
+        getMatches(userNameString: userNameString, auth_header: auth_header)
+        
+        tableView.reloadData()
     }
     
     /*

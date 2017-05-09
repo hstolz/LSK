@@ -19,8 +19,10 @@ class LoginAPI{
     // add Luis's implementation of storing user data
     class func doLogin(userNameString: String, userPasswordString: String) {
         
+        let defaults = UserDefaults.standard
         let loginEndpoint: String = "https://wordup-163921.appspot.com/login/"
         let loginParams: [String: Any] = ["username": userNameString, "password": userPasswordString]
+        // defaults.set(userNameString, forKey: defaultsKeys.keyOne)
         
         Alamofire.request(loginEndpoint, method: .post, parameters: loginParams, encoding: JSONEncoding.default).validate()
             .responseJSON { response in // was .responseJSON
@@ -32,6 +34,11 @@ class LoginAPI{
                     let my_Profile = response.result.value as! NSDictionary
                     print(my_Profile["username"] as! String)
                     print(response.result)
+                    
+                    defaults.set(my_Profile["id"], forKey: defaultsKeys.keyThree)
+                    defaults.set(my_Profile["known_lang"], forKey: defaultsKeys.keyFour)
+                    defaults.set(my_Profile["learn_lang"], forKey: defaultsKeys.keyFive)
+                    defaults.set(my_Profile["bio"], forKey: defaultsKeys.keySix)
                     
                     
                 case .failure(let error):
