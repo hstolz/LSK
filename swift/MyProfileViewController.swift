@@ -44,8 +44,6 @@ class MyProfileViewController: UIViewController {
         let userId = defaults.string(forKey: defaultsKeys.keyThree)
         let known_lang_code = defaults.string(forKey: defaultsKeys.keyFour)
         let learn_lang_code = defaults.string(forKey: defaultsKeys.keyFive)
-        let bio_preset = defaults.string(forKey: defaultsKeys.keySix)
-        profileUserDescription.text = bio_preset
         
         let bio_preset = defaults.string(forKey: defaultsKeys.keySix)
        // profileUserDescription.text = bio_preset
