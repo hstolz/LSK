@@ -186,16 +186,47 @@ class SearchTableViewController: UITableViewController {
             print("MOST IMPORTANT NUMBER HERE")
             print (indexPath?.row)
             print (indexPath!.row)
-            //            print (self.TableData[2]["id"]!)
-            
             svc.userId = self.TableData[indexPath!.row]
+            svc.matchAvailability = 1 //match is available if it appears in search
+            
+//            /times/#/ where # is the ID of the profile you wanna match with
+//            request type is GET
+            
             print (svc.userId)
             
             
-            //            }
             
-            //            tableView.deselectRow(at: indexPath, animated: true)
-            
+            //CHECK THE MATCH STATUS OF THIS PERSON AND UPDATE next view accordingly
+//            let defaults = UserDefaults.standard
+//            let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)!
+//            let auth_header = ["Authorization" : "Token " + tokenString]
+//            let potentialMatchId = self.TableData[indexPath!.row]["id"]
+//            print ("THIS SHOULD BE 5")
+//            print ("THIS SHOULD BE 5")
+//            print ("THIS SHOULD BE 5")
+//            print ("THIS SHOULD BE 5")
+//            print (potentialMatchId)
+//            print ("THIS SHOULD BE 5")
+//            print ("THIS SHOULD BE 5")
+//            print ("THIS SHOULD BE 5")
+//            let matchStatusEndpoint: String = "https://wordup-163921.appspot.com/times/"
+//            Alamofire.request(matchStatusEndpoint, headers: auth_header)
+//                .responseJSON { response in
+//                    // print response as string for debugging, testing, etc.
+//                    print(response.result.value as! NSArray)
+//                    print(response.result.error)
+//                    
+//                    self.TableData = (response.value as! NSArray) as! [[String : AnyObject]]
+//                    print (self.TableData)
+//                    self.tableView.reloadData()
+//                    //                let userId = self.TableData[0]["id"]
+//                    //                print ("PRINTING USER ID NOW")
+//                    //                print (userId)
+//                    //                DataManager.sharedInstance.otherUserId = userId as! Int
+//                    //                print (DataManager.sharedInstance.otherUserId)
+//                    //
+//            }
+//            
         }
     }
     override  func tableView(_ tableView: UITableView, didSelectRowAt

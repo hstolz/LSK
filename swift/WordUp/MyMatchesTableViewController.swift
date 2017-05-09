@@ -208,6 +208,7 @@ class MyMatchesTableViewController: UITableViewController {
             //            print (self.TableData[2]["id"]!)
             
             svc.userId = self.TableData[indexPath!.row]
+            svc.matchAvailability = 0 //if the profile appears in mymatches, we have already matched
             print (svc.userId)
             
             
