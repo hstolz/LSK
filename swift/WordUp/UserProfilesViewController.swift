@@ -32,6 +32,7 @@ class UserProfilesViewController: UIViewController {
     @IBOutlet weak var learn_lang: UILabel!
     @IBOutlet weak var profileUsername: UILabel!
     @IBOutlet weak var known_lang: UILabel!
+    @IBOutlet weak var profileDescription: UITextView!
     //@IBOutlet weak var profileUsername: UILabel!
     //    @IBOutlet weak var profileUsername: UILabel!
     //    @IBOutlet weak var profileUsername: UILabel!
@@ -57,6 +58,8 @@ class UserProfilesViewController: UIViewController {
         profileUsername.text = fullName
         let known_lang_code = self.userId["known_lang"] as! String
         let learn_lang_code = self.userId["learn_lang"] as! String
+        let bio_preset = self.userId["bio"] as! String
+        profileDescription.text = bio_preset
         //            self.userId["id"]?.stringValue
         
         

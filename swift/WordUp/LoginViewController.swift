@@ -18,6 +18,7 @@ struct defaultsKeys {
     static let keyThree = "userId"
     static let keyFour = "known_lang"
     static let keyFive = "learn_lang"
+    static let keySix = "bio"
     
     
 }
@@ -85,6 +86,16 @@ class LoginViewController: UIViewController {
                     defaults.set(my_Profile["id"], forKey: defaultsKeys.keyThree)
                     defaults.set(my_Profile["known_lang"], forKey: defaultsKeys.keyFour)
                     defaults.set(my_Profile["learn_lang"], forKey: defaultsKeys.keyFive)
+                    defaults.set(my_Profile["bio"], forKey: defaultsKeys.keySix)
+                    print ("THIS IS THE INFO WE NEED")
+                    print ("THIS IS THE INFO WE NEED")
+                    print ("THIS IS THE INFO WE NEED")
+                    print ("THIS IS THE INFO WE NEED")
+                    print (my_Profile)
+                    print ("THIS IS THE INFO WE NEED")
+                    print ("THIS IS THE INFO WE NEED")
+                    print ("THIS IS THE INFO WE NEED")
+                    print ("THIS IS THE INFO WE NEED")
                     
                     // HIT TOKEN
                     let tokenEndpoint: String = "https://wordup-163921.appspot.com/token/"
