@@ -47,8 +47,8 @@ class MatchList(generics.ListCreateAPIView):
 	serializer_class = ProfileSerializer
 
 	def list(self, request):
-		t = datetime.now() - timedelta(hours=6) # fuck you google
-		Match.objects.filter(time_1__lte=t).update(status_code=0, time_1=None, time_2=None, time_3=None)
+		t = datetime.now() - timedelta(hours=6) # 'east coast' google SQL server is 6 hours off...
+		Match.objects.filter(time_1__lte=t).update(status_code=0, time_1=None)
 		username = request.user.get_username()
 		try:
 			initiator = Profile.objects.get(username=username)
@@ -127,8 +127,8 @@ class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
 		return (user, match, None, None)
 
 	def retrieve(self, request, pk):
-		t = datetime.now() - timedelta(hours=6) # fuck you google
-		Match.objects.filter(time_1__lte=t).update(status_code=0, time_1=None, time_2=None, time_3=None)
+		t = datetime.now() - timedelta(hours=6) # 'east coast' google SQL server is 6 hours off...
+		Match.objects.filter(time_1__lte=t).update(status_code=0, time_1=None)
 		username = request.user.get_username()
 		(user, match, msg, code) = self.check(username, pk)
 		if match is None:
@@ -147,17 +147,16 @@ class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
 		new_status = int(data.get('new_status'))
 		if new_status is None or new_status not in range(4):
 			return Response(data='new status missing or invalid', status=status.HTTP_400_BAD_REQUEST)
+		location = data.get('location')
+		if new_status in (self.OFFER_1, self.OFFER_2, self.CREATED) and location is None:
+			return Response(data='location is missing', status=status.HTTP_400_BAD_REQUEST)
 		
-		times = []
-		for t in [data.get('time_1'), data.get('time_2'), data.get('time_3')]:
-			if t is None:
-				times.append(None)
-			else:
-				try:
-					times.append(datetime.strptime(t, '%Y %m %d %H %M'))
-				except:
-					return Response(data='time formatted incorrectly', status=status.HTTP_400_BAD_REQUEST)
-		
+		time_1 = data.get('time_1')
+		try:
+			time_1 = datetime.strptime(time_1, '%Y %m %d %H %M')
+		except:
+			return Response(data='time formatted incorrectly', status=status.HTTP_400_BAD_REQUEST)
+	
 		if new_status == old_status:
 			return Response(data='same status provided; no change', status=status.HTTP_400_BAD_REQUEST)
 		if ((old_status == self.INITIAL and new_status == self.CREATED) or
@@ -166,24 +165,18 @@ class MatchDetail(generics.RetrieveUpdateDestroyAPIView):
 			(new_status == self.OFFER_1 and user == match.user_id2) or
 			(new_status == self.OFFER_2 and user == match.user_id1)):
 			return Response(data='invalid state transition', status=status.HTTP_400_BAD_REQUEST)
-		if new_status in (self.OFFER_1, self.OFFER_2) and None in times:
-			return Response(data='fewer than three times provided', status=status.HTTP_400_BAD_REQUEST)
-		if (new_status == self.CREATED and ((times[0] == None) or 
-				(times[0] not in (match.time_1, match.time_2, match.time_3)))):
+		if (new_status == self.CREATED and ((time_1 == None) or time_1 != match.time_1)):
 			return Response(data='none or inconsistent time provided', status=status.HTTP_400_BAD_REQUEST)
 
 		if   new_status == self.INITIAL:
-			(sc, t1, t2, t3) = (new_status, None, None, None)
-		elif new_status == self.CREATED:
-			(sc, t1, t2, t3) = (new_status, times[0], None, None)
+			(sc, time_1, loc) = (new_status, None, None)
 		else:
-			(sc, t1, t2, t3) = (new_status, times[0], times[1], times[2])
+			(sc, time_1, loc) = (new_status, time_1, location)
 		
 		try:
 			match.status_code=sc
-			match.time_1=t1
-			match.time_2=t2
-			match.time_3=t3
+			match.time_1=time_1
+			match.location=loc
 			match.save()
 		except IntegrityError as e:
 			print e.message
@@ -211,13 +204,13 @@ class TimeDetail(generics.RetrieveAPIView):
 	serializer_class = MatchSerializer
 	(INITIAL, OFFER_1, OFFER_2, CREATED) = (0, 1, 2, 3)
 
-	def check(self, username, pk):
+	def check(self, username, id):
 		try:
 			user = Profile.objects.get(username=username)
 		except:
 			return (None, None, None, 'user not found', status.HTTP_400_BAD_REQUEST)
 		try:
-			partner = Profile.objects.get(id=pk)
+			partner = Profile.objects.get(id=id)
 		except:
 			return (None, None, None, 'partner not found', status.HTTP_400_NOT_FOUND)
 		(c1, c2, c3, c4) = (Q(user_id1=user), Q(user_id2=user), Q(user_id1=partner), Q(user_id2=partner))
@@ -227,10 +220,10 @@ class TimeDetail(generics.RetrieveAPIView):
 		return (user, partner, match[0], None, None)
 
 	def retrieve(self, request, id):
-		t = datetime.now() - timedelta(hours=6) # fuck you google
-		Match.objects.filter(time_1__lte=t).update(status_code=0, time_1=None, time_2=None, time_3=None)
+		t = datetime.now() - timedelta(hours=6) # 'east coast' google SQL server is 6 hours off...
+		Match.objects.filter(time_1__lte=t).update(status_code=0, time_1=None)
 		username = request.user.get_username()
-		(user, partner, match, msg, code) = self.check(username, pk)
+		(user, partner, match, msg, code) = self.check(username, id)
 		if match is None:
 			return Response(data=msg, status=code)
 		serializer = MatchSerializer(match)
@@ -252,10 +245,12 @@ class Register(generics.CreateAPIView):
 		p_email 	 = data.get('email')
 		p_known_lang = data.get('known_lang')
 		p_learn_lang = data.get('learn_lang')
+		p_bio 		 = data.get('bio')
 		
 		try:
-			p = Profile.objects.create_user(password=p_password, username=p_username, first_name=p_first_name, 
-				last_name=p_last_name, email=p_email, known_lang=p_known_lang, learn_lang=p_learn_lang)
+			p = Profile.objects.create_user(password=p_password, username=p_username, 
+				first_name=p_first_name, last_name=p_last_name, email=p_email, 
+				known_lang=p_known_lang, learn_lang=p_learn_lang, bio=p_bio)
 		except (ValidationError, IntegrityError) as e:
 			return Response(data=e.message, status=status.HTTP_400_BAD_REQUEST)
 		else:

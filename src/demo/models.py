@@ -24,7 +24,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 class Profile(AbstractUser):
 	known_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
 	learn_lang = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='')
-	# need to add bio
+	bio 	   = models.CharField(max_length=500, default='')
 
 	class Meta:
 		db_table = 'profiles'
@@ -36,8 +36,7 @@ class Match(models.Model):
 	user_id1 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='initiator', on_delete=models.CASCADE)
 	user_id2 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acceptor', on_delete=models.CASCADE)
 	time_1 = models.DateTimeField(null=True)
-	time_2 = models.DateTimeField(null=True)
-	time_3 = models.DateTimeField(null=True)
+	location = models.CharField(max_length=100, default='', null=True)
 	status_code = models.IntegerField(default='0') 
 	#Key for status codes
 	#0 - match made, but no scheduling has occurred
