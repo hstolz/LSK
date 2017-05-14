@@ -12,7 +12,6 @@ import Alamofire
 class MyProfileViewController: UIViewController {
     
     
-    
     var languageTable: [String:String] = [
         "English" : "en", "Chinese" : "zh",
         "Spanish" : "es", "Arabic"  : "ar",
@@ -33,20 +32,16 @@ class MyProfileViewController: UIViewController {
     //@IBOutlet weak var profileUserDescription: UITextView!
     @IBOutlet weak var profileUserDescriptionLabel: UILabel!
     
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let defaults = UserDefaults.standard
         let userName = defaults.string(forKey: defaultsKeys.keyOne)
-        
-        let userId = defaults.string(forKey: defaultsKeys.keyThree)
         let known_lang_code = defaults.string(forKey: defaultsKeys.keyFour)
         let learn_lang_code = defaults.string(forKey: defaultsKeys.keyFive)
-        
         let bio_preset = defaults.string(forKey: defaultsKeys.keySix)
-       // profileUserDescription.text = bio_preset
+        
         profileUserDescriptionLabel.text = bio_preset
         
         for entry in languageTable {
@@ -61,120 +56,55 @@ class MyProfileViewController: UIViewController {
             }
         }
 
-        
         profileUserName.text = userName
-        //profileUserDescription.becomeFirstResponder()
-        
-//        let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)!
-//        
-//        
-//        let auth_header = ["Authorization" : "Token " + tokenString]
-//        
-//        let userNameEndpoint: String = "https://wordup-163921.appspot.com/profiles/"
-//        Alamofire.request(userNameEndpoint, headers: auth_header).validate()
-//            .responseJSON { response in
-//                
-//                switch response.result {
-//                case .success:
-//                    print("Validation Successful")
-//                    
-//                    
-//                case .failure(let error):
-//                    print(error)
-//                    print("HEY WHATS UP HELLO, SOMETHING IS WRONG")
-//                }
-//                
-//                // print response as string for debugging, testing, etc.
-//                // print(response.result.value as! NSArray)
-//                // print(response.result.value as! NSDictionary)
-//                print(response.result.error)
-//                print(response.request)  // original URL request
-//                print(response.response) // HTTP URL response
-//                print(response.data)     // server data
-//                
-//        }
-
-        
-
-
-        
-        
-        
-        // Do any additional setup after loading the view.
-        
     }
     
     @IBAction func logoutButtonPressed(_ sender: Any) {
-        
-        print("HEY WHATS UP HELLO~~")
-        
-        // POST WITH TOKEN
-        let todosEndpoint: String = "https://wordup-163921.appspot.com/logout/"
-        let newTodo: [String: Any] = [:]
-        
-        //        print(loginUserNameTextField.text)
-        //        print(loginPasswordTextField.text)
-        
+                
+        // Post With Token
+        let endpoint: String = "https://wordup-163921.appspot.com/logout/"
+        let parameters: [String: Any] = [:]
         let defaults = UserDefaults.standard
         let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)!
         let auth_header = ["Authorization" : "Token " + tokenString]
         
-        
-        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo, encoding: JSONEncoding.default, headers: auth_header)
-            .response { response in // was .responseJSON
-                if let httpError = response.error {
-                    print("ERROR HERE:")
-                    let statusCode = httpError._code
-                    print(statusCode)
-                } else {
+        Alamofire.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: auth_header).validate()
+            .responseData { response in
+                
+                switch response.result {
+                case .success:
                     
+                    // Clear Global Variables
+                    defaults.removeObject(forKey: defaultsKeys.keyOne)
+                    defaults.removeObject(forKey: defaultsKeys.keyTwo)
+                    defaults.removeObject(forKey: defaultsKeys.tokenKey)
+                    defaults.removeObject(forKey: defaultsKeys.keyThree)
+                    defaults.removeObject(forKey: defaultsKeys.keyFour)
+                    defaults.removeObject(forKey: defaultsKeys.keyFive)
+                    defaults.removeObject(forKey: defaultsKeys.keySix)
+                    defaults.synchronize()
+                    
+                    self.performSegue(withIdentifier: "LogoutSegue", sender: self)
+                    
+                case .failure(let error):
+                    print("Logout Failed: \(error)")
+                    debugPrint(response)
+                    self.showAlert(userMessage: "Failed to logout. Please try again.", title: "Error")
                 }
                 
         }
         
-        // CLEAR GLOBAL VARS
-        
-        defaults.removeObject(forKey: defaultsKeys.keyOne)
-        defaults.removeObject(forKey: defaultsKeys.keyTwo)
-        defaults.removeObject(forKey: defaultsKeys.tokenKey)
-        defaults.removeObject(forKey: defaultsKeys.keyThree)
-        defaults.removeObject(forKey: defaultsKeys.keyFour)
-        defaults.removeObject(forKey: defaultsKeys.keyFive)
-        defaults.removeObject(forKey: defaultsKeys.keySix)
-        //defaults.removeObject(forKey: defaultsKeys.keySeven)
-        defaults.synchronize()
-        
-        let userName = defaults.string(forKey: defaultsKeys.keyOne)
-        print ("WE ARE CLEARING THE USERNAME KEY")
-        print (userName)
-        let password = defaults.string(forKey: defaultsKeys.tokenKey)
-        print ("WE ARE CLEARING THE TOKEN KEY")
-        print (password)
-        
     }
     
-    
-    
-    //    func textFieldShouldReturn(textField: UITextView) -> Bool{
-    //        return true
-    //    }
-    
+    func showAlert(userMessage:String, title:String) {
+        let myAlert = UIAlertController(title: title, message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { action in }
+        myAlert.addAction(okAction);
+        self.present(myAlert, animated: true, completion: nil);
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     Get the new view controller using segue.destinationViewController.
-     Pass the selected object to the new view controller.
-     }
-     */
-
-
 }

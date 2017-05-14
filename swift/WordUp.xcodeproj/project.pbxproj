@@ -12,20 +12,13 @@
 		852380421EBEE831003CB58E /* UserProfilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852380411EBEE831003CB58E /* UserProfilesViewController.swift */; };
 		852380441EBEE992003CB58E /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852380431EBEE992003CB58E /* SearchTableViewController.swift */; };
 		852380461EBEFAE5003CB58E /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852380451EBEFAE5003CB58E /* MyProfileViewController.swift */; };
-		855492481EC1285F003F448A /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855492471EC1285F003F448A /* MainTabBarViewController.swift */; };
-		856556111EC104AC00CF3D7F /* LoginAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856556101EC104AC00CF3D7F /* LoginAPI.swift */; };
-		856F41281EB5605600AA5869 /* TestMatchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856F41271EB5605600AA5869 /* TestMatchTableViewController.swift */; };
 		856FC0DA1EB5235900E621C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856FC0D91EB5235900E621C6 /* AppDelegate.swift */; };
-		856FC0DC1EB5235900E621C6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856FC0DB1EB5235900E621C6 /* ViewController.swift */; };
 		856FC0DF1EB5235900E621C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 856FC0DD1EB5235900E621C6 /* Main.storyboard */; };
 		856FC0E11EB5235900E621C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 856FC0E01EB5235900E621C6 /* Assets.xcassets */; };
-		856FC0E41EB5235900E621C6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 856FC0E21EB5235900E621C6 /* LaunchScreen.storyboard */; };
+		856FC0E41EB5235900E621C6 /* Splash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 856FC0E21EB5235900E621C6 /* Splash.storyboard */; };
 		856FC0EF1EB5235900E621C6 /* WordUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856FC0EE1EB5235900E621C6 /* WordUpTests.swift */; };
-		8574798E1EB996F000D44150 /* SchedulerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8574798D1EB996F000D44150 /* SchedulerViewController.swift */; };
-		85B0C3611EB5325B005B4515 /* ProtoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B0C3601EB5325B005B4515 /* ProtoTableViewController.swift */; };
 		85B0C3631EB534DA005B4515 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B0C3621EB534DA005B4515 /* RegistrationViewController.swift */; };
 		85B0C3651EB539E7005B4515 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B0C3641EB539E7005B4515 /* LoginViewController.swift */; };
-		85B0C3671EB53A11005B4515 /* MatchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B0C3661EB53A11005B4515 /* MatchTableViewController.swift */; };
 		85CEBD9D1EBEA7440081B7F3 /* MyMatchesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CEBD9C1EBEA7440081B7F3 /* MyMatchesTableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,24 +38,17 @@
 		852380411EBEE831003CB58E /* UserProfilesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfilesViewController.swift; sourceTree = "<group>"; };
 		852380431EBEE992003CB58E /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
 		852380451EBEFAE5003CB58E /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyProfileViewController.swift; path = ../MyProfileViewController.swift; sourceTree = "<group>"; };
-		855492471EC1285F003F448A /* MainTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
-		856556101EC104AC00CF3D7F /* LoginAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAPI.swift; sourceTree = "<group>"; };
-		856F41271EB5605600AA5869 /* TestMatchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestMatchTableViewController.swift; sourceTree = "<group>"; };
 		856FC0D61EB5235900E621C6 /* WordUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WordUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		856FC0D91EB5235900E621C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		856FC0DB1EB5235900E621C6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		856FC0DE1EB5235900E621C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		856FC0E01EB5235900E621C6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		856FC0E31EB5235900E621C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		856FC0E31EB5235900E621C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Splash.storyboard; sourceTree = "<group>"; };
 		856FC0E51EB5235900E621C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		856FC0EA1EB5235900E621C6 /* WordUpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WordUpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		856FC0EE1EB5235900E621C6 /* WordUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordUpTests.swift; sourceTree = "<group>"; };
 		856FC0F01EB5235900E621C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8574798D1EB996F000D44150 /* SchedulerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulerViewController.swift; sourceTree = "<group>"; };
-		85B0C3601EB5325B005B4515 /* ProtoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtoTableViewController.swift; sourceTree = "<group>"; };
 		85B0C3621EB534DA005B4515 /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		85B0C3641EB539E7005B4515 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		85B0C3661EB53A11005B4515 /* MatchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchTableViewController.swift; sourceTree = "<group>"; };
 		85CEBD9C1EBEA7440081B7F3 /* MyMatchesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyMatchesTableViewController.swift; sourceTree = "<group>"; };
 		86A5443FDEB96289FCFFC987 /* Pods-WordUpTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordUpTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WordUpTests/Pods-WordUpTests.release.xcconfig"; sourceTree = "<group>"; };
 		B86D86F4BBD535EDCE5C9C28 /* Pods-WordUp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordUp.release.xcconfig"; path = "Pods/Target Support Files/Pods-WordUp/Pods-WordUp.release.xcconfig"; sourceTree = "<group>"; };
@@ -122,24 +108,17 @@
 		856FC0D81EB5235900E621C6 /* WordUp */ = {
 			isa = PBXGroup;
 			children = (
-				852380451EBEFAE5003CB58E /* MyProfileViewController.swift */,
-				856FC0D91EB5235900E621C6 /* AppDelegate.swift */,
-				856FC0DB1EB5235900E621C6 /* ViewController.swift */,
-				856FC0DD1EB5235900E621C6 /* Main.storyboard */,
-				852380431EBEE992003CB58E /* SearchTableViewController.swift */,
 				856FC0E01EB5235900E621C6 /* Assets.xcassets */,
-				856FC0E21EB5235900E621C6 /* LaunchScreen.storyboard */,
 				856FC0E51EB5235900E621C6 /* Info.plist */,
-				85B0C3601EB5325B005B4515 /* ProtoTableViewController.swift */,
-				85B0C3621EB534DA005B4515 /* RegistrationViewController.swift */,
+				856FC0E21EB5235900E621C6 /* Splash.storyboard */,
+				856FC0DD1EB5235900E621C6 /* Main.storyboard */,
+				856FC0D91EB5235900E621C6 /* AppDelegate.swift */,
 				85B0C3641EB539E7005B4515 /* LoginViewController.swift */,
-				85B0C3661EB53A11005B4515 /* MatchTableViewController.swift */,
-				856F41271EB5605600AA5869 /* TestMatchTableViewController.swift */,
-				8574798D1EB996F000D44150 /* SchedulerViewController.swift */,
+				85B0C3621EB534DA005B4515 /* RegistrationViewController.swift */,
+				852380451EBEFAE5003CB58E /* MyProfileViewController.swift */,
 				85CEBD9C1EBEA7440081B7F3 /* MyMatchesTableViewController.swift */,
+				852380431EBEE992003CB58E /* SearchTableViewController.swift */,
 				852380411EBEE831003CB58E /* UserProfilesViewController.swift */,
-				856556101EC104AC00CF3D7F /* LoginAPI.swift */,
-				855492471EC1285F003F448A /* MainTabBarViewController.swift */,
 			);
 			path = WordUp;
 			sourceTree = "<group>";
@@ -253,7 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				856FC0E41EB5235900E621C6 /* LaunchScreen.storyboard in Resources */,
+				856FC0E41EB5235900E621C6 /* Splash.storyboard in Resources */,
 				856FC0E11EB5235900E621C6 /* Assets.xcassets in Resources */,
 				856FC0DF1EB5235900E621C6 /* Main.storyboard in Resources */,
 			);
@@ -366,19 +345,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				856FC0DC1EB5235900E621C6 /* ViewController.swift in Sources */,
 				85CEBD9D1EBEA7440081B7F3 /* MyMatchesTableViewController.swift in Sources */,
-				856F41281EB5605600AA5869 /* TestMatchTableViewController.swift in Sources */,
-				855492481EC1285F003F448A /* MainTabBarViewController.swift in Sources */,
-				85B0C3671EB53A11005B4515 /* MatchTableViewController.swift in Sources */,
-				85B0C3611EB5325B005B4515 /* ProtoTableViewController.swift in Sources */,
 				85B0C3631EB534DA005B4515 /* RegistrationViewController.swift in Sources */,
 				852380461EBEFAE5003CB58E /* MyProfileViewController.swift in Sources */,
-				856556111EC104AC00CF3D7F /* LoginAPI.swift in Sources */,
 				852380421EBEE831003CB58E /* UserProfilesViewController.swift in Sources */,
 				85B0C3651EB539E7005B4515 /* LoginViewController.swift in Sources */,
 				852380441EBEE992003CB58E /* SearchTableViewController.swift in Sources */,
-				8574798E1EB996F000D44150 /* SchedulerViewController.swift in Sources */,
 				856FC0DA1EB5235900E621C6 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -410,12 +382,12 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		856FC0E21EB5235900E621C6 /* LaunchScreen.storyboard */ = {
+		856FC0E21EB5235900E621C6 /* Splash.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				856FC0E31EB5235900E621C6 /* Base */,
 			);
-			name = LaunchScreen.storyboard;
+			name = Splash.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

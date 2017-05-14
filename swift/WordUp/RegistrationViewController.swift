@@ -43,7 +43,6 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
         "Twi" : "tw", "Urdu" : "ur",
         "Polish" : "pl"]
     
-    
     var knownLangOpts = ["English", "Chinese", "Spanish",
                          "Arabic", "Portuguese", "Russian", "French",
                          "Japanese", "Italian", "Czech", "German",
@@ -51,11 +50,10 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
                          "Persian", "Swahili", "Turkish",
                          "Twi", "Urdu", "Polish"]
     
+    
     func donePicker() {
-        
         learnLangTextField.resignFirstResponder()
         knownLangTextField.resignFirstResponder()
-        
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -91,15 +89,12 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
         }
     }
     
-    
     override func viewDidLoad() {
-        super.viewDidLoad()
         
-        LoginAPI.doTestPrint()
+        super.viewDidLoad()
         
         ScrollView.contentSize.height = 1200
         
-        // NEW STUFF
         let toolBar = UIToolbar()
         toolBar.barStyle = UIBarStyle.default
         toolBar.sizeToFit()
@@ -123,19 +118,13 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
         learnLangPickerView.delegate = self
         learnLangPickerView.tag = 2
         
-      //  print(UserDefaults.standard.string(forKey: defaultsKeys.keyOne))
-        
-        
-        // Do any additional setup after loading the view.
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func tapRegisterButton(_ sender: Any) {
-        
         
         let userEmail = userEmailTextField.text
         let userPassword = userPasswordTextField.text
@@ -147,178 +136,88 @@ class RegistrationViewController: UIViewController , UIPickerViewDataSource, UIP
         let userLastName = lastNameTextField.text
         let userBio = bioTextView.text!
         
-        
-        
-        
-        // check for empty fields
-        //        if (userEmail == "" || userEmail == nil ) {
-        //
-        //            // display alert! return for now...
-        //            displayMyAlertMessage(userMessage: "All fields are required.");
-        //            return;
-        //        }
-        
-        // check if passwords match
-        
         if (userPassword != userRepeatPassword) {
-            
-            // display an alert. return for now...
-            displayMyAlertMessage(userMessage: "Passwords do not match.");
+            showAlert(userMessage: "Passwords do not match.", title: "Error:");
             return;
         }
-        
-        // store data
         
         UserDefaults.standard.set(userEmail, forKey:"userEmail");
         UserDefaults.standard.set(userEmail, forKey:"userPassword");
         UserDefaults.standard.synchronize();
         
-        //NSUserDefaults.standardUserDefaults().setObject(userEmail, forKey:"userEmail");
-        // send alert with confirmation
-        var myAlert = UIAlertController(title: "Alert", message: "Registration Successful! Word Up!", preferredStyle: UIAlertControllerStyle.alert);
-        let okAction = UIAlertAction(title:"Ok", style:UIAlertActionStyle.default){ action in
+        let endpoint: String = "https://wordup-163921.appspot.com/register/"
+        let parameters: [String: Any] = ["last_name": userLastName!, "known_lang": userKnownLang!, "first_name": userFirstName!, "learn_lang": userLearnLang!, "username": userNameText!, "password" : userPassword! , "email": userEmail!, "bio": userBio]
+        
+        print("Registration Parameters: \(parameters)")
+        Alamofire.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default).validate()
+            .responseData { response in
             
-            self.dismiss(animated: true, completion: nil);
-            
-        }
-        
-        
-        //////POST!!!!
-        //let url:String = "https://jsonplaceholder.typicode.com/todos/1"
-        // let userEndpoint = "https://wordup-163921.appspot.com/profiles/"
-        
-        
-        
-        let todosEndpoint: String = "https://wordup-163921.appspot.com/register/"
-        let newTodo: [String: Any] = ["last_name": userLastName, "known_lang": userKnownLang, "first_name": userFirstName, "learn_lang": userLearnLang, "username": userNameText, "password" : userPassword , "email": userEmail, "bio": userBio]
-        
-        
-        Alamofire.request(todosEndpoint, method: .post, parameters: newTodo, encoding: JSONEncoding.default).validate().responseData { (responseObject) -> Void in
-            
-            switch responseObject.result {
+            switch response.result {
             case .success:
-                print("Successful")
                 
                 let defaults = UserDefaults.standard
-                
                 defaults.set(userNameText, forKey: defaultsKeys.keyOne)
-                
                 defaults.set(userPassword, forKey: defaultsKeys.keyTwo)
-                
                 let userName = defaults.string(forKey: defaultsKeys.keyOne)
-                print (userName!)
                 let password = defaults.string(forKey: defaultsKeys.keyTwo)
-                print (password!)
                 
-//                LoginAPI.doLogin(userNameString: userName!, userPasswordString: password!)
-//                LoginAPI.doGetToken(userNameString: userName!, userPasswordString: password!)
-                let loginEndpoint: String = "https://wordup-163921.appspot.com/login/"
-                let loginParam: [String: Any] = ["username": userName!, "password": password!]
+                let endpoint: String = "https://wordup-163921.appspot.com/login/"
+                let parameters: [String: Any] = ["username": userName!, "password": password!]
                 
-                Alamofire.request(loginEndpoint, method: .post, parameters: loginParam, encoding: JSONEncoding.default).validate()
-                    .responseJSON { response in // was .responseJSON
+                print("Login Parameters: \(parameters)")
+                Alamofire.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default).validate()
+                    .responseJSON { response in
                         
-                        switch response.result {
-                        case .success:
-                            
-                            print(response.result.value as! NSDictionary)
-                            let my_Profile = response.result.value as! NSDictionary
-                            print(my_Profile["username"] as! String)
-                            print(response.result)
-                            
-                            defaults.set(my_Profile["id"], forKey: defaultsKeys.keyThree)
-                            defaults.set(my_Profile["known_lang"], forKey: defaultsKeys.keyFour)
-                            defaults.set(my_Profile["learn_lang"], forKey: defaultsKeys.keyFive)
-                            defaults.set(my_Profile["bio"], forKey: defaultsKeys.keySix)
-                            
-                            print("FMLLllllllLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-                            print("FMLLllllllLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-                            print("FMLLllllllLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-                            print("FMLLllllllLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-                            print("FMLLllllllLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-                            print(defaults.string(forKey: defaultsKeys.keyFour)!)
-                            
-
-                            
-                            // HIT TOKEN
-                            let tokenEndpoint: String = "https://wordup-163921.appspot.com/token/"
-                            let tokenParameters: [String: Any] = ["username": userName!, "password": password!]
-                            
-                            var tokenDict = [String:String]()
-                            Alamofire.request(tokenEndpoint, method: .post, parameters: tokenParameters, encoding: JSONEncoding.default)
-                                .responseJSON { response in // was .responseJSON
-                                    if let httpError = response.error {
-                                        print("ERROR HERE:")
-                                        let statusCode = httpError._code
-                                        print(statusCode)
-                                    } else {
+                    switch response.result {
+                    case .success:
+                        
+                        let user_profile = response.result.value as! NSDictionary
+                        defaults.set(user_profile["id"], forKey: defaultsKeys.keyThree)
+                        defaults.set(user_profile["known_lang"], forKey: defaultsKeys.keyFour)
+                        defaults.set(user_profile["learn_lang"], forKey: defaultsKeys.keyFive)
+                        defaults.set(user_profile["bio"], forKey: defaultsKeys.keySix)
+                        
+                        let endpoint: String = "https://wordup-163921.appspot.com/token/"
+                        let parameters: [String: Any] = ["username": userName!, "password": password!]
+                        
+                        print("Token Parameters: \(parameters)")
+                        Alamofire.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default).validate()
+                            .responseJSON { response in
+                                
+                            switch response.result {
+                            case .success:
+                                
+                                let tokenDict = (response.value as! NSDictionary) as! [String : String]
+                                defaults.set(tokenDict["token"], forKey: defaultsKeys.tokenKey)
                                         
-                                        print("DEM DEBUG STATEMENTS DOE")
-                                        debugPrint(response)
-                                        
-                                        print("TOKEN AS NSDICT:")
-                                        
-                                        print(response.value as! NSDictionary)
-                                        tokenDict = (response.value as! NSDictionary) as! [String : String]
-                                        print(tokenDict)
-                                        
-                                        defaults.set(tokenDict["token"], forKey: defaultsKeys.tokenKey)
-                                        
-                                        let tokenString = defaults.string(forKey: defaultsKeys.tokenKey)
-                                        print("WE ARE PRINTING THE SHIT NOW")
-                                        print(tokenString)
-                                        
-                                        self.performSegue(withIdentifier: "registrationSuccessSegue", sender: self)
-                                        
-                                        
-                                    }
-                                    
+                                self.performSegue(withIdentifier: "registrationSuccessSegue",
+                                                  sender: self)
+                                
+                            case .failure(let error):
+                                print(error)
                             }
-                            
-                            
-                        case .failure(let error):
-                            print(error)
-                            
-                            
                         }
-                }
-
-//                self.performSegue(withIdentifier: "registrationSuccessSegue", sender: self)
+                            
+                    case .failure(let error):
+                        print(error)
+                    }
+            }
                 
             case .failure(let error):
                 print(error)
-                print(responseObject.data)
-                print(responseObject.value)
-                self.displayMyAlertMessage(userMessage: "Error Registering, Please try again. If you are already registered, please login!")
-                
-                print("HEY WHATS UP HELLO, SOMETHING IS WRONG")
+                print(response.data!)
+                print(response.value!)
+                self.showAlert(userMessage: "Could not register, please try again. If you are already registered, please login!", title: "Error")
             }
-            
         }
-        
-        
     }
     
-        
-    func displayMyAlertMessage(userMessage: String) {
-        
-        var myAlert = UIAlertController(title: "Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.alert);
-        
-        let okAction = UIAlertAction(title:"Ok", style:
-            UIAlertActionStyle.default, handler: nil);
-        
+    func showAlert(userMessage:String, title:String) {
+        let myAlert = UIAlertController(title: title, message: userMessage,
+                                        preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { action in }
         myAlert.addAction(okAction);
-        self.present(myAlert, animated:true, completion: nil);
-        
+        self.present(myAlert, animated: true, completion: nil);
     }
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
 }
