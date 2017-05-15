@@ -1,6 +1,0 @@
-framework module Pods_WordUp {
-  umbrella header "Pods-WordUp-umbrella.h"
-
-  export *
-  module * { export * }
-}
