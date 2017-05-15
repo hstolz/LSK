@@ -4,20 +4,26 @@ description: WordUp – COS 333 Project
 ---
 
 # WordUp
-### The Language Learning Facilitator
+#### The Language Learning Facilitator
 
-# Description | Elevator Pitch
-Almost everyone has gone through the process of learning a second language and knows that oral fluency and is one of the hardest aspects of language mastery. Despite all the time put into reading books and studying up a language, when it comes to developing oral skills, there is absolutely nothing better than face to face conversation. However, a majority of the time, opportunities for face-to-face practice are scarce. Other language learning applications focus on developing vocabulary or connecting people from across the globe, but most do not focus on in person, face-to-face interaction. The goal of **WordUp** is to connect students around campus and to facilitate in-person meetings to bring your language abilities to the next level. 
+# Description
+Almost everyone has gone through the process of learning a second language and knows that oral fluency is one of the most difficult aspects of language mastery. Despite all the time put into reading books and studying up on a language, when it comes to developing oral skills, there is absolutely nothing better than face-to-face conversation. However, a majority of the time, opportunities for this type of practice are scarce. Other language-learning applications focus on developing vocabulary or connecting people from across the globe, but most do not focus on in-person interactions. The goal of  **WordUp** is to connect students within the multilingual environment that is a college campus and to facilitate meetups to bring your language abilities to the next level.
 
-# Team
+# [Product Guide](productguide.pdf)
+
+## [Demo Slides](demo.pdf)
+
+## [Design Document](design_doc.pdf)
+
+
+## Team
 - **Henry Stolz (Manager) – hstolz@**
 - Jacky Kong – jacky@
 - Luis Legro – llegro@
 
-# Project Manager
+## Project Manager
 - Jon
 
-# [Design Document](design_doc.pdf)
 
 # Timeline
 

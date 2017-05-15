@@ -22,9 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'dc)te@vombxyf_15tlc28t_%_17di=f!4rp4@0c3g@m#olv1t!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://wordup-163921.appspot.com']
-
+DEBUG = False
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'wordup-163921.appspot.com']
+ALLOWED_HOSTS = ['wordup-163921.appspot.com']
 
 # Application definition
 
@@ -60,7 +60,7 @@ AUTHENTICATION_BACKENDS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
