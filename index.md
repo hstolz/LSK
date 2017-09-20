@@ -12,7 +12,7 @@ Almost everyone has gone through the process of learning a second language and k
 # [Product Guide](productguide.pdf)
 
 ## [Demo Slides](demo.pdf)
-*Note: click on black rectangles to see videos showcasing the various elements of functionality.*
+*Note: click the black rectangles on the demo slides to see videos showcasing the various elements of functionality.*
 
 ## [Design Document](design_doc.pdf)
 
